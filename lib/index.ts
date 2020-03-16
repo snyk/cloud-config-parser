@@ -1,5 +1,7 @@
-import 'source-map-support/register';
+export {
+  CloudConfigFileTypes
+} from './types';
 
-export default function (): boolean {
-  return true;
-}
+export {
+  issuePathToLineNumber as issuesToLineNumbers
+} from './issue-to-line'
