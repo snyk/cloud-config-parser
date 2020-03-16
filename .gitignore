@@ -1,0 +1,6 @@
+/node_modules/
+/dist
+/dist-test
+package-lock.json
+test/fixtures/**/build
+npm-debug.log
