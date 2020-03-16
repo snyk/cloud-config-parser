@@ -1,5 +1,5 @@
 {
-  "name": "@snyk/snyk-config-parser",
+  "name": "@snyk/cloud-config-parser",
   "description": "A utility library for finding issues in configuration files",
   "main": "dist/index.js",
   "scripts": {
