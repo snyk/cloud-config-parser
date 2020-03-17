@@ -2,7 +2,7 @@ import { issuePathToLineNumber } from "../../lib/issue-to-line";
 import { CloudConfigFileTypes } from "../../lib/types";
 
 const dumyFileContent = "dumy";
-const dumyPath = "dumy";
+const dumyPath = ["dumy"];
 
 describe("issuePathToLineNumber", () => {
   test("YAML file", () => {

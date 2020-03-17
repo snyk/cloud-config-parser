@@ -7,7 +7,7 @@ function getRandomLineNumber(max: number): number {
 export function issuePathToLineNumber(
   fileContent: string,
   fileType: types.CloudConfigFileTypes,
-  path: string
+  path: string[]
 ): number {
   console.log(path);
   switch (fileType) {
