@@ -64,7 +64,7 @@ describe('Yaml Parser', () => {
 
     expect(
       findLineNumberToPath(yamlContent, CloudConfigFileTypes.YAML, path),
-    ).toEqual(77);
+    ).toEqual(78);
   });
 
   test('Path with array - full path not exists', () => {
@@ -82,6 +82,23 @@ describe('Yaml Parser', () => {
     expect(
       findLineNumberToPath(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(74);
+  });
+
+  test('Path with array - full path not exists - stops at array', () => {
+    const path: string[] = [
+      '[DocId: 1]',
+      'spec',
+      'template',
+      'spec',
+      'containers[snyky1]',
+      'resource',
+      'securityContext',
+      'capabilities',
+    ];
+
+    expect(
+      findLineNumberToPath(yamlContent, CloudConfigFileTypes.YAML, path),
+    ).toEqual(55);
   });
 
   test('Path without array - path not exists - 1 item', () => {
