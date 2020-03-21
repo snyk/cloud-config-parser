@@ -1,37 +1,37 @@
-import { issuePathToLineNumber } from "../../lib/issue-to-line";
-import { CloudConfigFileTypes } from "../../lib/types";
+import { issuePathToLineNumber } from '../../lib/issue-to-line';
+import { CloudConfigFileTypes } from '../../lib/types';
 
-const dumyFileContent = "dumy";
-const dumyPath = ["dumy"];
+const dumyFileContent = 'dumy';
+const dumyPath = ['dumy'];
 
-describe("issuePathToLineNumber", () => {
-  test("YAML file", () => {
+describe('issuePathToLineNumber', () => {
+  test('YAML file', () => {
     expect(
       issuePathToLineNumber(
         dumyFileContent,
         CloudConfigFileTypes.YAML,
-        dumyPath
-      )
+        dumyPath,
+      ),
     ).toEqual(0);
   });
 
-  test("JSON - not supported", () => {
+  test('JSON - not supported', () => {
     expect(() => {
       issuePathToLineNumber(
         dumyFileContent,
         CloudConfigFileTypes.JSON,
-        dumyPath
+        dumyPath,
       );
-    }).toThrowError("JSON format is not supported");
+    }).toThrowError('JSON format is not supported');
   });
 
-  test("Unsupported type", () => {
+  test('Unsupported type', () => {
     expect(() => {
       issuePathToLineNumber(
         dumyFileContent,
         CloudConfigFileTypes.JSON + 100,
-        dumyPath
+        dumyPath,
       );
-    }).toThrowError("Unknown format");
+    }).toThrowError('Unknown format');
   });
 });
