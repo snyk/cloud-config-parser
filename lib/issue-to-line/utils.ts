@@ -1,81 +1,123 @@
-import { CloudConfigFileTypes, TreesMap, PathDetails, Node } from '../types';
-import { buildYamlTree } from './yaml-parser';
+import * as _ from 'lodash';
+import {
+  CloudConfigFileTypes,
+  MapsDocIdToTree,
+  PathDetails,
+  FileStructureNode,
+  LineLocation,
+} from '../types';
+import { buildYamlTreeMap, getPathDetailsForYamlFile } from './yaml/parser';
 
-const buildTreeForType = {
-  [CloudConfigFileTypes.YAML]: buildYamlTree,
-  [CloudConfigFileTypes.JSON]: buildJsonTree,
+export const buildTreeForTypeMap = {
+  [CloudConfigFileTypes.YAML]: buildYamlTreeMap,
+  [CloudConfigFileTypes.JSON]: buildJsonTreeMap,
 };
 
-function buildJsonTree(): TreesMap {
+function buildJsonTreeMap(): MapsDocIdToTree {
   //TODO: Placeholder for adding JSON Implementation
-  return [];
+  throw new Error('JSON format is not supported');
 }
 
-export function findLineNumberToPath(
-  fileContent: string,
-  fileType: CloudConfigFileTypes,
-  path: string[],
-): number {
-  const trees = buildTreeForType[fileType](fileContent);
-  const pathDetails = getPathDetails(path, fileType);
-  const treeNodes: Node[] = trees[pathDetails.DocId].node;
-  return findLinePerPath(treeNodes, pathDetails);
-}
-
-function getPathDetails(
+export function getPathDetails(
   path: string[],
   fileType: CloudConfigFileTypes,
 ): PathDetails {
   if (fileType === CloudConfigFileTypes.YAML) {
-    const firstPath = path[0];
-    if (firstPath.includes('[DocId:')) {
-      const docId = firstPath.replace('[DocId: ', '').replace(']', '');
-      const pathWithoutDocId = path.splice(1);
-      return {
-        DocId: parseInt(docId),
-        Path: removeInputPathPrefix(pathWithoutDocId),
-      };
-    }
+    return getPathDetailsForYamlFile(path);
   }
   return {
-    DocId: 0,
-    Path: removeInputPathPrefix(path),
+    docId: 0,
+    path: removeInputPathPrefix(path),
   };
 }
 
-function removeInputPathPrefix(path: string[]): string[] {
+export function removeInputPathPrefix(path: string[]): string[] {
   if (path[0] === 'input') {
     return path.splice(1);
   }
   return path;
 }
 
-function findLinePerPath(nodes: Node[], pathDetails: PathDetails): number {
+export function findLineNumberOfGivenPath(
+  nodes: FileStructureNode[],
+  pathDetails: PathDetails,
+): number {
   const filteredNodes = nodes.filter(
-    (node) => node.key === pathDetails.Path[0],
+    (node) => node.key === pathDetails.path[0],
   );
   if (filteredNodes.length === 0) {
     //Not exists
     return nodes[0].lineLocation.line;
   }
 
-  if (pathDetails.Path.length === 1) {
+  if (pathDetails.path.length === 1) {
     return filteredNodes[0].lineLocation.line;
-  } else {
-    return getLineNumber(filteredNodes[0], pathDetails.Path, 1);
   }
+
+  return getLineNumberForSingleNode(
+    filteredNodes[0],
+    pathDetails.path.splice(1),
+  );
 }
 
-function getLineNumber(node: Node, path: string[], index: number): number {
-  if (typeof node.values === 'string' || index === path.length) {
-    return node.lineLocation.line;
-  } else {
-    const nodes = node.values.filter((node) => node.key === path[index]);
-    if (nodes.length === 0) {
+function getLineNumberForSingleNode(
+  baseNode: FileStructureNode,
+  remainingPath: string[],
+): number {
+  let node: FileStructureNode = baseNode;
+  while (remainingPath.length) {
+    if (typeof node.values === 'string') {
+      return node.lineLocation.line;
+    }
+
+    const nodeForPath = getNodeForPath(node.values, remainingPath[0]);
+    if (!nodeForPath) {
       //Not exists
       return node.lineLocation.line;
-    } else {
-      return getLineNumber(nodes[0], path, index + 1);
     }
+
+    node = nodeForPath;
+    remainingPath = remainingPath.splice(1);
   }
+
+  return node.lineLocation.line;
+}
+
+function getNodeForPath(
+  nodeValues: FileStructureNode[],
+  path: string,
+): FileStructureNode | undefined {
+  if (!path.includes('[')) {
+    return _.find(nodeValues, (currNode) => currNode.key === path);
+  }
+
+  const [nodeName, subNodeName] = path.replace(']', '').split('[');
+  const subNodeId: number = parseInt(subNodeName);
+  if (Number.isInteger(subNodeId)) {
+    return _.find(nodeValues, (currNode) => currNode.key === path);
+  }
+
+  return _.find(nodeValues, (currNode) => {
+    const values = currNode.values;
+
+    if (typeof values !== 'string') {
+      return (
+        currNode.key.startsWith(nodeName) &&
+        _.filter(values, (value) => {
+          return value.key === 'name' && value.values === subNodeName;
+        }).length > 0
+      );
+    }
+    return false;
+  });
+}
+
+export function getLineLocationForYamlElement(
+  nodeElement: YamlNodeElement,
+): LineLocation {
+  return {
+    line: nodeElement.startMark.line + 1,
+    columnStart: nodeElement.startMark.pointer,
+    columnEnd: nodeElement.endMark.pointer,
+  };
 }

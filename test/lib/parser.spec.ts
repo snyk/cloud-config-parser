@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { findLineNumberToPath } from '../../lib/issue-to-line/utils';
+import { issuePathToLineNumber } from '../../lib/issue-to-line/index';
 import { CloudConfigFileTypes } from '../../lib/types';
 
 describe('Yaml Parser', () => {
@@ -15,7 +15,7 @@ describe('Yaml Parser', () => {
     ];
 
     expect(
-      findLineNumberToPath(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(27);
   });
 
@@ -28,7 +28,7 @@ describe('Yaml Parser', () => {
     ];
 
     expect(
-      findLineNumberToPath(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(26);
   });
 
@@ -45,7 +45,24 @@ describe('Yaml Parser', () => {
     ];
 
     expect(
-      findLineNumberToPath(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+    ).toEqual(75);
+  });
+
+  test('Path with array - full path exists - container array with number', () => {
+    const path: string[] = [
+      '[DocId: 1]',
+      'spec',
+      'template',
+      'spec',
+      'containers[0]',
+      'resources',
+      'securityContext',
+      'privileged',
+    ];
+
+    expect(
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(75);
   });
 
@@ -63,7 +80,7 @@ describe('Yaml Parser', () => {
     ];
 
     expect(
-      findLineNumberToPath(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(78);
   });
 
@@ -80,7 +97,7 @@ describe('Yaml Parser', () => {
     ];
 
     expect(
-      findLineNumberToPath(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(74);
   });
 
@@ -91,13 +108,13 @@ describe('Yaml Parser', () => {
       'template',
       'spec',
       'containers[snyky1]',
-      'resource',
+      'nonExistingResource',
       'securityContext',
       'capabilities',
     ];
 
     expect(
-      findLineNumberToPath(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(55);
   });
 
@@ -105,7 +122,7 @@ describe('Yaml Parser', () => {
     const path: string[] = ['[DocId: 0]', 'specs'];
 
     expect(
-      findLineNumberToPath(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(2);
   });
 
@@ -113,7 +130,7 @@ describe('Yaml Parser', () => {
     const path: string[] = ['[DocId: 0]', 'specs', 'selector'];
 
     expect(
-      findLineNumberToPath(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(2);
   });
 
@@ -121,7 +138,7 @@ describe('Yaml Parser', () => {
     const path: string[] = ['[DocId: 1]', 'specs'];
 
     expect(
-      findLineNumberToPath(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(31);
   });
 
@@ -129,7 +146,25 @@ describe('Yaml Parser', () => {
     const path: string[] = ['spec', 'selector', 'app.kubernetes.io/name'];
 
     expect(
-      findLineNumberToPath(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+    ).toEqual(27);
+  });
+});
+
+describe('Yaml Parser - Single document', () => {
+  const fileName = 'test/fixture/single.yaml';
+  const yamlContent = readFileSync(fileName).toString();
+
+  test('Path without array - full path exists', () => {
+    const path: string[] = [
+      '[DocId: 0]',
+      'spec',
+      'selector',
+      'app.kubernetes.io/instance',
+    ];
+
+    expect(
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(27);
   });
 });

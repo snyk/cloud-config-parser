@@ -3,27 +3,27 @@ export enum CloudConfigFileTypes {
   JSON,
 }
 
-export interface Tree {
-  node: Node[];
+export interface FileStructureTree {
+  nodes: FileStructureNode[];
 }
 
-export interface TreesMap {
-  [index: number]: Tree;
+export interface MapsDocIdToTree {
+  [index: number]: FileStructureTree;
 }
 
-interface LineLocation {
+export interface LineLocation {
   line: number;
   columnStart: number;
   columnEnd: number;
 }
 
-export interface Node {
+export interface FileStructureNode {
   key: string;
   lineLocation: LineLocation;
-  values: Node[] | string;
+  values: FileStructureNode[] | string;
 }
 
 export interface PathDetails {
-  DocId: number;
-  Path: string[];
+  docId: number;
+  path: string[];
 }

@@ -1,19 +1,21 @@
 import * as types from '../types';
-import { findLineNumberToPath } from './utils';
+import {
+  buildTreeForTypeMap,
+  getPathDetails,
+  findLineNumberOfGivenPath,
+} from './utils';
 
 export function issuePathToLineNumber(
   fileContent: string,
   fileType: types.CloudConfigFileTypes,
   path: string[],
 ): number {
-  switch (fileType) {
-    case types.CloudConfigFileTypes.YAML: {
-      const lineNumber = findLineNumberToPath(fileContent, fileType, path);
-      return lineNumber;
-    }
-    case types.CloudConfigFileTypes.JSON:
-      throw new Error('JSON format is not supported');
-    default:
-      throw new Error('Unknown format');
+  if (!Object.values(types.CloudConfigFileTypes).includes(fileType)) {
+    throw new Error('Unknown format');
   }
+
+  const trees = buildTreeForTypeMap[fileType](fileContent);
+  const pathDetails = getPathDetails(path, fileType);
+  const treeNodes: types.FileStructureNode[] = trees[pathDetails.docId].nodes;
+  return findLineNumberOfGivenPath(treeNodes, pathDetails);
 }
