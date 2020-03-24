@@ -2,17 +2,18 @@ import { issuePathToLineNumber } from '../../lib/issue-to-line';
 import { CloudConfigFileTypes } from '../../lib/types';
 
 const dumyFileContent = 'dumy';
+const dumyFileContentYaml = 'dumy: test';
 const dumyPath = ['dumy'];
 
 describe('issuePathToLineNumber', () => {
   test('YAML file', () => {
     expect(
       issuePathToLineNumber(
-        dumyFileContent,
+        dumyFileContentYaml,
         CloudConfigFileTypes.YAML,
         dumyPath,
       ),
-    ).toEqual(0);
+    ).toEqual(1);
   });
 
   test('JSON - not supported', () => {
