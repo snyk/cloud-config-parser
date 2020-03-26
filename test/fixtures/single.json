@@ -86,7 +86,9 @@
             "securityContext": {
               "privileged": true,
               "capabilities": {
-                "drop": ["all"]
+                "drop": [
+                  "all"
+                ]
               }
             }
           }

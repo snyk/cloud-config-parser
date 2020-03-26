@@ -1,7 +1,6 @@
 import * as _ from 'lodash';
 import {
   CloudConfigFileTypes,
-  MapsDocIdToTree,
   PathDetails,
   FileStructureNode,
   LineLocation,

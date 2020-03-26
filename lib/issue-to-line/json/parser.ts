@@ -16,7 +16,7 @@ const MINUS = '-';
 const possibleValueTypes = ['String', 'Boolean', 'Null', 'Numeric'];
 
 export function buildJsonTreeMap(jsonContent: string): MapsDocIdToTree {
-  let iter = new JsonIterator(jsonContent);
+  const iter = new JsonIterator(jsonContent);
   iter.next();
   iter.skipComments();
   const singleWalk = walk(iter);
@@ -135,7 +135,7 @@ function handleNativeCase(iter: JsonIterator): FileStructureNode[] {
   }
 
   const nativeNode: FileStructureNode = {
-    key: iter.lastProp(),
+    key: iter.getLastProp(),
     lineLocation: iter.getCurrentLocation(),
     values: currentValue,
   };
@@ -145,8 +145,8 @@ function handleNativeCase(iter: JsonIterator): FileStructureNode[] {
 }
 
 function walk(iter: JsonIterator): FileStructureNode[] {
-  let currentNode: FileStructureNode = {
-    key: iter.lastProp(),
+  const currentNode: FileStructureNode = {
+    key: iter.getLastProp(),
     lineLocation: iter.getCurrentLocation(),
     values: [],
   };
@@ -162,17 +162,24 @@ function walk(iter: JsonIterator): FileStructureNode[] {
       ];
     case BRACKET_OPEN:
       iter.next();
-      const values = skipCommentsAndParseObjectOrArray(iter, false);
-      const nodes: FileStructureNode[] = [];
-      for (let i = 0; i < values.length; i++) {
-        const element = values[i];
-        nodes.push({
-          key: `${iter.lastProp()}[${i}]`,
-          lineLocation: element.lineLocation,
-          values: element.values,
-        });
-      }
-      return nodes;
+      return skipCommentsAndParseObjectOrArray(iter, false).map((value, i) => {
+        return {
+          key: `${iter.getLastProp()}[${i}]`,
+          lineLocation: value.lineLocation,
+          values: value.values,
+        };
+      });
+    // const values = skipCommentsAndParseObjectOrArray(iter, false);
+    // const nodes: FileStructureNode[] = [];
+    // for (let i = 0; i < values.length; i++) {
+    //     const element = values[i];
+    //     nodes.push({
+    //         key: `${iter.getLastProp()}[${i}]`,
+    //         lineLocation: element.lineLocation,
+    //         values: element.values,
+    //     });
+    // }
+    // return nodes;
     case MINUS:
       iter.next();
       break;

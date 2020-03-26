@@ -9,15 +9,15 @@ interface IteratorToken extends Token {
 
 export default class JsonIterator {
   private tokens: IteratorToken[] = [];
-  private i: number = -1;
+  private i = -1;
   private currentToken: IteratorToken = {
     type: '',
     value: '',
     loc: undefined,
   };
-  private done: boolean = false;
-  private previous_props: Prop[] = [];
-  private last_prop: Prop = undefined;
+  private done = false;
+  private previousProps: Prop[] = [];
+  private lastProp: Prop = undefined;
 
   constructor(fileContent: string) {
     this.tokens = tokenize(fileContent, {
@@ -94,8 +94,8 @@ export default class JsonIterator {
     if (this.done) {
       throw new SyntaxError('Unexpected EOF');
     }
-    const new_token = this.tokens[++this.i];
-    this.currentToken = new_token;
+    const newToken = this.tokens[++this.i];
+    this.currentToken = newToken;
 
     if (!this.currentToken) {
       this.done = true;
@@ -116,19 +116,19 @@ export default class JsonIterator {
 
   //--------------- Prop Handling
   public setLastProp(prop: Prop) {
-    this.last_prop = prop;
+    this.lastProp = prop;
   }
 
   public pushLastProp() {
-    this.previous_props.push(this.last_prop);
-    this.last_prop = undefined;
+    this.previousProps.push(this.lastProp);
+    this.lastProp = undefined;
   }
 
   public restoreProp() {
-    this.last_prop = this.previous_props.pop();
+    this.lastProp = this.previousProps.pop();
   }
 
-  public lastProp(): string {
-    return this.last_prop ? this.last_prop.toString() : '';
+  public getLastProp(): string {
+    return this.lastProp ? this.lastProp.toString() : '';
   }
 }
