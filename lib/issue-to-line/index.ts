@@ -15,6 +15,9 @@ export function issuePathToLineNumber(
   }
 
   const trees = buildTreeForTypeMap[fileType](fileContent);
+  if (Object.keys(trees).length === 0) {
+    throw new Error('failed to create trees');
+  }
   const pathDetails = getPathDetails(path, fileType);
   const treeNodes: types.FileStructureNode[] = trees[pathDetails.docId].nodes;
   return findLineNumberOfGivenPath(treeNodes, pathDetails);

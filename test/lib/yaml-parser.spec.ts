@@ -168,3 +168,59 @@ describe('Yaml Parser - Single document', () => {
     ).toEqual(27);
   });
 });
+
+describe('YAML Parser - broken YAMLs', () => {
+  test('YAML - cut in the middle of an object - should not throw', () => {
+    const path: string[] = ['specs'];
+
+    const filePath = 'test/fixtures/broken-object.yaml';
+    const fileContent = readFileSync(filePath).toString();
+    expect(() => {
+      issuePathToLineNumber(fileContent, CloudConfigFileTypes.YAML, path);
+    }).not.toThrow();
+  });
+
+  test('Broken YAML - cut in the middle of an array', () => {
+    const path: string[] = ['specs'];
+
+    const filePath = 'test/fixtures/broken-array.yaml';
+    const fileContent = readFileSync(filePath).toString();
+
+    expect(() => {
+      issuePathToLineNumber(fileContent, CloudConfigFileTypes.YAML, path);
+    }).toThrowError('failed to compose_all for given yaml');
+  });
+
+  test('YAML - cut in the middle of an array of array - should not throw', () => {
+    const path: string[] = ['specs'];
+
+    const filePath = 'test/fixtures/broken-array-in-array.yaml';
+    const fileContent = readFileSync(filePath).toString();
+
+    expect(() => {
+      issuePathToLineNumber(fileContent, CloudConfigFileTypes.YAML, path);
+    }).not.toThrow();
+  });
+
+  test('Broken YAML - single chars', () => {
+    const path: string[] = ['specs'];
+
+    const InvalidChars = ['', ' '];
+    for (const brokenJson of InvalidChars) {
+      expect(() => {
+        issuePathToLineNumber(brokenJson, CloudConfigFileTypes.YAML, path);
+      }).toThrowError('failed to create trees');
+    }
+  });
+
+  test('Broken YAML - tokenize errors', () => {
+    const path: string[] = ['specs'];
+
+    const InvalidChars = ['"', '{', '[', '}', ']', "'"];
+    for (const brokenJson of InvalidChars) {
+      expect(() => {
+        issuePathToLineNumber(brokenJson, CloudConfigFileTypes.YAML, path);
+      }).toThrowError('failed to compose_all for given yaml');
+    }
+  });
+});
