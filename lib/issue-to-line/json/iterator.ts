@@ -129,6 +129,6 @@ export default class JsonIterator {
   }
 
   public getLastProp(): string {
-    return this.lastProp ? this.lastProp.toString() : '';
+    return this.lastProp !== undefined ? this.lastProp.toString() : '';
   }
 }
