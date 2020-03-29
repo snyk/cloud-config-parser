@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: snyky-service # asdf
+  #adsf
+  labels:
+    app.kubernetes.io/name: snyky-service
+    helm.sh/chart: snyky-service-0.1.0
+    app.kubernetes.io/instance: snyky-service
+    app.kubernetes.io/version: '1.0'
+    app.kubernetes.io/managed-by: Tiller
+spec:
+  type: ClusterIP
+  #asdf
+  ports: #af
+    # asdf
+    - port: 8080 #adsf
+      targetPo

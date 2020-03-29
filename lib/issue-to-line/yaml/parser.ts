@@ -20,11 +20,18 @@ const VAL_NODE_INDEX = 1;
 
 export function buildYamlTreeMap(yamlContent: string): MapsDocIdToTree {
   const yamlTrees: MapsDocIdToTree = {};
-  const docsArray = yamlJs.compose_all(yamlContent);
+  let docsArray = [];
+  try {
+    docsArray = yamlJs.compose_all(yamlContent);
+  } catch (error) {
+    throw new Error('failed to compose_all for given yaml');
+  }
+
   for (let i = 0; i < docsArray.length; i++) {
     const yamlDoc: YamlNodeElement = convertComposeElementToType(docsArray[i]);
     yamlTrees[i] = buildTree(yamlDoc);
   }
+
   return yamlTrees;
 }
 
