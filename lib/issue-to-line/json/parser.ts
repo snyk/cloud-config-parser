@@ -125,7 +125,8 @@ function handleNativeCase(iter: JsonIterator): FileStructureNode[] {
     throw new Error('failed to find type ' + iter.current().type);
   }
 
-  // turn ""apiVersion"" -> "apiVersion" / '"apiVersion"' -> "apiVersion"
+  // turn "apiVersion" -> apiVersion
+  // turn 'apiVersion' -> apiVersion
   let currentValue: string = iter.current().value;
   if (
     (currentValue.startsWith('"') && currentValue.endsWith('"')) ||
@@ -169,17 +170,6 @@ function walk(iter: JsonIterator): FileStructureNode[] {
           values: value.values,
         };
       });
-    // const values = skipCommentsAndParseObjectOrArray(iter, false);
-    // const nodes: FileStructureNode[] = [];
-    // for (let i = 0; i < values.length; i++) {
-    //     const element = values[i];
-    //     nodes.push({
-    //         key: `${iter.getLastProp()}[${i}]`,
-    //         lineLocation: element.lineLocation,
-    //         values: element.values,
-    //     });
-    // }
-    // return nodes;
     case MINUS:
       iter.next();
       break;
