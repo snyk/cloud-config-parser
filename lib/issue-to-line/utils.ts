@@ -1,22 +1,17 @@
 import * as _ from 'lodash';
 import {
   CloudConfigFileTypes,
-  MapsDocIdToTree,
   PathDetails,
   FileStructureNode,
   LineLocation,
 } from '../types';
 import { buildYamlTreeMap, getPathDetailsForYamlFile } from './yaml/parser';
+import { buildJsonTreeMap } from './json/parser';
 
 export const buildTreeForTypeMap = {
   [CloudConfigFileTypes.YAML]: buildYamlTreeMap,
   [CloudConfigFileTypes.JSON]: buildJsonTreeMap,
 };
-
-function buildJsonTreeMap(): MapsDocIdToTree {
-  //TODO: Placeholder for adding JSON Implementation
-  throw new Error('JSON format is not supported');
-}
 
 export function getPathDetails(
   path: string[],

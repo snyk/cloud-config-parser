@@ -1,0 +1,107 @@
+//comment1
+{
+  "apiVersion": "apps/v1", //comment2
+  "kind": "Deployment",
+  // comment3
+  "metadata": {
+    "name": "snyky-deployment",
+    "labels": {
+      "app.kubernetes.io/name": "snyky",
+      "helm.sh/chart": "snyky-0.1.0",
+      "app.kubernetes.io/instance": "snyky",
+      "app.kubernetes.io/version": "1.0",
+      "app.kubernetes.io/managed-by": "Tiller"
+    }
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "app.kubernetes.io/name": "snyky",
+      "app.kubernetes.io/instance": "snyky"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app.kubernetes.io/name": "snyky",
+          "app.kubernetes.io/instance": "snyky"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "snyky1",
+            "image": "orka/snyky1:latest",
+            "imagePullPolicy": "IfNotPresent",
+            "ports": [
+              {
+                "name": "http",
+                "containerPort": 5000,
+                "protocol": "TCP"
+              }
+            ],
+            "livenessProbe": {
+              "httpGet": {
+                "path": "/",
+                "port": "http"
+              }
+            },
+            "readinessProbe": {
+              "httpGet": {
+                "path": "/",
+                "port": "http"
+              }
+            },
+            "resources": null,
+            "securityContext": {
+              "privileged": true,
+              "capabilities": {
+                "drop": ["all"]
+              }
+            }
+          },
+          {
+            "name": "snyky2",
+            "image": "orka/snyky2:latest",
+            "imagePullPolicy": "IfNotPresent",
+            "ports": [
+              {
+                "name": "http",
+                "containerPort": 5000,
+                "protocol": "TCP"
+              }
+            ],
+            "livenessProbe": {
+              "httpGet": {
+                "path": "/",
+                "port": "http"
+              }
+            },
+            "readinessProbe": {
+              "httpGet": {
+                "path": "/",
+                "port": "http"
+              }
+            },
+            "resources": null,
+            "securityContext": {
+              "privileged": true,
+              "capabilities": {
+                "drop": [
+                  "all"
+                ]
+              }
+            }
+          }
+        ],
+        "volumes": [
+          {
+            "name": "dockersock",
+            "hostPath": {
+              "path": "/var/run/docker.sock"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -16,16 +16,6 @@ describe('issuePathToLineNumber', () => {
     ).toEqual(1);
   });
 
-  test('JSON - not supported', () => {
-    expect(() => {
-      issuePathToLineNumber(
-        dumyFileContent,
-        CloudConfigFileTypes.JSON,
-        dumyPath,
-      );
-    }).toThrowError('JSON format is not supported');
-  });
-
   test('Unsupported type', () => {
     expect(() => {
       issuePathToLineNumber(

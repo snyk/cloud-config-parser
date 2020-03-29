@@ -1,0 +1,10 @@
+//comment1
+{
+  "apiVersion": "apps/v1", //comment2
+  "kind": "Deployment",
+  // comment3
+  "metadata": {
+    "name": "snyky-deployment",
+    "labels": {
+      "app.kubernetes.io/name": "snyky",
+      "helm.sh/chart": "snyky-0.1.0",

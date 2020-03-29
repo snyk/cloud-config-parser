@@ -3,7 +3,7 @@ import { issuePathToLineNumber } from '../../lib/issue-to-line/index';
 import { CloudConfigFileTypes } from '../../lib/types';
 
 describe('Yaml Parser', () => {
-  const fileName = 'test/fixture/multi.yaml';
+  const fileName = 'test/fixtures/multi.yaml';
   const yamlContent = readFileSync(fileName).toString();
 
   test('Path without array - full path exists', () => {
@@ -152,7 +152,7 @@ describe('Yaml Parser', () => {
 });
 
 describe('Yaml Parser - Single document', () => {
-  const fileName = 'test/fixture/single.yaml';
+  const fileName = 'test/fixtures/single.yaml';
   const yamlContent = readFileSync(fileName).toString();
 
   test('Path without array - full path exists', () => {
