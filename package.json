@@ -13,7 +13,8 @@
     "test:watch": "tsc-watch --onSuccess 'npm run test:unit'",
     "build": "tsc",
     "build-watch": "tsc -w",
-    "prepare": "npm run build"
+    "prepare": "npm run snyk-protect && npm run build",
+    "snyk-protect": "snyk protect"
   },
   "types": "./dist/index.d.ts",
   "repository": {
@@ -35,7 +36,8 @@
     "lodash": "^4.17.15",
     "source-map-support": "^0.5.16",
     "tslib": "^1.10.0",
-    "yaml-js": "^0.2.3"
+    "yaml-js": "^0.2.3",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "@types/esprima": "^4.0.2",
@@ -52,5 +54,6 @@
     "ts-node": "8.6.2",
     "tsc-watch": "^4.1.0",
     "typescript": "^3.7.5"
-  }
+  },
+  "snyk": true
 }
