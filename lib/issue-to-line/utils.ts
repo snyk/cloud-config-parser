@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import {
   CloudConfigFileTypes,
   PathDetails,
@@ -83,22 +82,22 @@ function getNodeForPath(
   path: string,
 ): FileStructureNode | undefined {
   if (!path.includes('[')) {
-    return _.find(nodeValues, (currNode) => currNode.key === path);
+    return nodeValues.find((currNode) => currNode.key === path);
   }
 
   const [nodeName, subNodeName] = path.replace(']', '').split('[');
   const subNodeId: number = parseInt(subNodeName);
   if (Number.isInteger(subNodeId)) {
-    return _.find(nodeValues, (currNode) => currNode.key === path);
+    return nodeValues.find((currNode) => currNode.key === path);
   }
 
-  return _.find(nodeValues, (currNode) => {
+  return nodeValues.find((currNode) => {
     const values = currNode.values;
 
     if (typeof values !== 'string') {
       return (
         currNode.key.startsWith(nodeName) &&
-        _.filter(values, (value) => {
+        values.filter((value) => {
           return value.key === 'name' && value.values === subNodeName;
         }).length > 0
       );
