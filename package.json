@@ -13,8 +13,7 @@
     "test:watch": "tsc-watch --onSuccess 'npm run test:unit'",
     "build": "tsc",
     "build-watch": "tsc -w",
-    "prepare": "npm run snyk-protect && npm run build",
-    "snyk-protect": "snyk protect"
+    "prepare": "npm run build"
   },
   "types": "./dist/index.d.ts",
   "repository": {
@@ -33,16 +32,13 @@
   "homepage": "https://github.com/snyk/snyk-config-parser#readme",
   "dependencies": {
     "esprima": "^4.0.1",
-    "lodash": "^4.17.15",
     "source-map-support": "^0.5.16",
     "tslib": "^1.10.0",
-    "yaml-js": "^0.2.3",
-    "snyk": "^1.316.1"
+    "yaml-js": "^0.2.3"
   },
   "devDependencies": {
     "@types/esprima": "^4.0.2",
     "@types/jest": "^25.1.1",
-    "@types/lodash": "^4.14.149",
     "@types/node": "^12.12.26",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
@@ -54,6 +50,5 @@
     "ts-node": "8.6.2",
     "tsc-watch": "^4.1.0",
     "typescript": "^3.7.5"
-  },
-  "snyk": true
+  }
 }
