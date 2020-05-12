@@ -82,7 +82,7 @@ function getNodeForPath(
   path: string,
 ): FileStructureNode | undefined {
   if (!path.includes('[')) {
-    return nodeValues.find((currNode) => currNode.key === path);
+    return nodeValues.find((currNode) => currNode.key.startsWith(path));
   }
 
   const [nodeName, subNodeName] = path.replace(']', '').split('[');
