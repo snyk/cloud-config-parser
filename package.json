@@ -34,7 +34,7 @@
     "esprima": "^4.0.1",
     "source-map-support": "^0.5.16",
     "tslib": "^1.10.0",
-    "yaml-js": "^0.2.3"
+    "yaml-js": "^0.3.0"
   },
   "devDependencies": {
     "@types/esprima": "^4.0.2",
