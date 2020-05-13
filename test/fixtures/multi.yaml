@@ -108,3 +108,21 @@ spec:
         - name: dockersock
           hostPath:
             path: /var/run/docker.sock
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: MultiIssues
+spec:
+  privileged: true
+  allowPrivilegeEscalation: true
+  defaultAllowPrivilegeEscalation: true
+  hostPID: true
+  hostIPC: true
+  hostNetwork: true
+  runAsUser:
+    rule: RunAsAny
+  allowedCapabilities:
+    - ALL
+  requiredDropCapabilities:
+    - "SYS_ADMIN"

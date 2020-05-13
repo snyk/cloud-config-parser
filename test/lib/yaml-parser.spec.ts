@@ -149,6 +149,14 @@ describe('Yaml Parser', () => {
       issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(27);
   });
+
+  test('Ends with array returns the object itself', () => {
+    const path: string[] = ['[DocId: 2]', 'spec', 'allowedCapabilities'];
+
+    expect(
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+    ).toEqual(126);
+  });
 });
 
 describe('Yaml Parser - Single document', () => {
