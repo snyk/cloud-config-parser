@@ -5,3 +5,4 @@ package-lock.json
 test/fixtures/**/build
 npm-debug.log
 .DS_Store
+.eslintcache

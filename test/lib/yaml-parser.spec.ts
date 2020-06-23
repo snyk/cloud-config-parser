@@ -3,7 +3,7 @@ import { issuePathToLineNumber } from '../../lib/issue-to-line/index';
 import { CloudConfigFileTypes } from '../../lib/types';
 
 describe('Yaml Parser', () => {
-  const fileName = 'test/fixtures/multi.yaml';
+  const fileName = 'test/fixtures/yaml/multi.yaml';
   const yamlContent = readFileSync(fileName).toString();
 
   test('Path without array - full path exists', () => {
@@ -160,7 +160,7 @@ describe('Yaml Parser', () => {
 });
 
 describe('Yaml Parser - Single document', () => {
-  const fileName = 'test/fixtures/single.yaml';
+  const fileName = 'test/fixtures/yaml/single.yaml';
   const yamlContent = readFileSync(fileName).toString();
 
   test('Path without array - full path exists', () => {
@@ -181,7 +181,7 @@ describe('YAML Parser - broken YAMLs', () => {
   test('YAML - cut in the middle of an object - should not throw', () => {
     const path: string[] = ['specs'];
 
-    const filePath = 'test/fixtures/broken-object.yaml';
+    const filePath = 'test/fixtures/yaml/broken-object.yaml';
     const fileContent = readFileSync(filePath).toString();
     expect(() => {
       issuePathToLineNumber(fileContent, CloudConfigFileTypes.YAML, path);
@@ -191,7 +191,7 @@ describe('YAML Parser - broken YAMLs', () => {
   test('Broken YAML - cut in the middle of an array', () => {
     const path: string[] = ['specs'];
 
-    const filePath = 'test/fixtures/broken-array.yaml';
+    const filePath = 'test/fixtures/yaml/broken-array.yaml';
     const fileContent = readFileSync(filePath).toString();
 
     expect(() => {
@@ -202,7 +202,7 @@ describe('YAML Parser - broken YAMLs', () => {
   test('YAML - cut in the middle of an array of array - should not throw', () => {
     const path: string[] = ['specs'];
 
-    const filePath = 'test/fixtures/broken-array-in-array.yaml';
+    const filePath = 'test/fixtures/yaml/broken-array-in-array.yaml';
     const fileContent = readFileSync(filePath).toString();
 
     expect(() => {
