@@ -6,10 +6,12 @@ import {
 } from '../types';
 import { buildYamlTreeMap, getPathDetailsForYamlFile } from './yaml/parser';
 import { buildJsonTreeMap } from './json/parser';
+import { buildTfTreeMap } from './tf/parser';
 
 export const buildTreeForTypeMap = {
   [CloudConfigFileTypes.YAML]: buildYamlTreeMap,
   [CloudConfigFileTypes.JSON]: buildJsonTreeMap,
+  [CloudConfigFileTypes.TF]: buildTfTreeMap,
 };
 
 export function getPathDetails(
@@ -87,7 +89,7 @@ function getNodeForPath(
 
   const [nodeName, subNodeName] = path.replace(']', '').split('[');
   const subNodeId: number = parseInt(subNodeName);
-  if (Number.isInteger(subNodeId)) {
+  if (!isNaN(subNodeId) && Number.isInteger(subNodeId)) {
     return nodeValues.find((currNode) => currNode.key === path);
   }
 
@@ -96,10 +98,11 @@ function getNodeForPath(
 
     if (typeof values !== 'string') {
       return (
-        currNode.key.startsWith(nodeName) &&
-        values.filter((value) => {
-          return value.key === 'name' && value.values === subNodeName;
-        }).length > 0
+        currNode.key === path ||
+        (currNode.key.startsWith(nodeName) &&
+          values.filter((value) => {
+            return value.key === 'name' && value.values === subNodeName;
+          }).length > 0)
       );
     }
     return false;

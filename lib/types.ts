@@ -1,6 +1,7 @@
 export enum CloudConfigFileTypes {
   YAML = 1,
   JSON,
+  TF,
 }
 
 export interface FileStructureTree {

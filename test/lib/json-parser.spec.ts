@@ -3,7 +3,7 @@ import { issuePathToLineNumber } from '../../lib/issue-to-line/index';
 import { CloudConfigFileTypes } from '../../lib/types';
 
 describe('JSON Parser - working JSONS', () => {
-  const simpleJson = 'test/fixtures/single.json';
+  const simpleJson = 'test/fixtures/json/single.json';
   const simpleJsonContent = readFileSync(simpleJson).toString();
 
   test('Path without array - full path exists', () => {
@@ -119,7 +119,7 @@ describe('JSON Parser - broken JSONS', () => {
   test('Broken JSON - cut in the middle of an object', () => {
     const path: string[] = ['specs'];
 
-    const filePath = 'test/fixtures/broken-object.json';
+    const filePath = 'test/fixtures/json/broken-object.json';
     const fileContent = readFileSync(filePath).toString();
     expect(() => {
       issuePathToLineNumber(fileContent, CloudConfigFileTypes.JSON, path);
@@ -129,7 +129,7 @@ describe('JSON Parser - broken JSONS', () => {
   test('Broken JSON - cut in the middle of an array', () => {
     const path: string[] = ['specs'];
 
-    const filePath = 'test/fixtures/broken-array.json';
+    const filePath = 'test/fixtures/json/broken-array.json';
     const fileContent = readFileSync(filePath).toString();
 
     expect(() => {
@@ -140,7 +140,7 @@ describe('JSON Parser - broken JSONS', () => {
   test('Broken JSON - cut in the middle of an array of array', () => {
     const path: string[] = ['specs'];
 
-    const filePath = 'test/fixtures/broken-array-in-array.json';
+    const filePath = 'test/fixtures/json/broken-array-in-array.json';
     const fileContent = readFileSync(filePath).toString();
 
     expect(() => {
