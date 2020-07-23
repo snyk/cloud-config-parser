@@ -201,7 +201,10 @@ function getSubTypeNode(
 }
 
 function getObjectNode(line: Line, stateQueue: TFState[]): FileStructureNode {
-  const key = line.content.split(Charts.openBracketsObject)[0].trim();
+  const key = line.content
+    .split(Charts.openBracketsObject)[0]
+    .split(Charts.equal)[0]
+    .trim();
   const objectNode: FileStructureNode = getNode(key, line);
 
   stateQueue.push({ structure: objectNode, type: TFLineTypes.OBJECT_START });

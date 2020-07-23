@@ -99,15 +99,19 @@ export function getLineType(
     return TFLineTypes.MULTILINE_STRING;
   }
 
-  if (line.content.includes(Charts.equal)) {
-    return TFLineTypes.STRING;
-  }
-
   if (line.content.includes(Charts.openBracketsObject)) {
     if (line.content.includes(Charts.closeBracketsObject)) {
+      if (line.content.includes(Charts.equal)) {
+        return TFLineTypes.STRING;
+      }
+
       return TFLineTypes.OBJECT_START_AND_END;
     }
     return TFLineTypes.OBJECT_START;
+  }
+
+  if (line.content.includes(Charts.equal)) {
+    return TFLineTypes.STRING;
   }
 
   if (line.content.includes(Charts.closeBracketsObject)) {
