@@ -29,7 +29,11 @@ export function buildYamlTreeMap(yamlContent: string): MapsDocIdToTree {
 
   for (let i = 0; i < docsArray.length; i++) {
     const yamlDoc: YamlNodeElement = convertComposeElementToType(docsArray[i]);
-    yamlTrees[i] = buildTree(yamlDoc);
+    // Handle case of empty document - the tag will be null
+    // No need to build tree for this document
+    if (yamlDoc.tag !== NULL_TAG) {
+      yamlTrees[i] = buildTree(yamlDoc);
+    }
   }
 
   return yamlTrees;
