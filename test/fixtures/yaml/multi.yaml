@@ -126,3 +126,4 @@ spec:
     - ALL
   requiredDropCapabilities:
     - "SYS_ADMIN"
+---
