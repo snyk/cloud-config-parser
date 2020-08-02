@@ -125,6 +125,13 @@ export function getLineType(
     return TFLineTypes.MULTILINE_STRING;
   }
 
+  if (currentObjectType === TFLineTypes.ARRAY_START) {
+    // Handling case of multi-line array object where the content is not yet finished.
+    // Those lines will be skipped as part of
+    // https://github.com/snyk/cloud-config-parser/blob/b5f5bdd8dd60cb3ad9c110bb6c640f08db0e108b/lib/issue-to-line/tf/parser.ts#L44
+    return TFLineTypes.STRING;
+  }
+
   throw new SyntaxError('Invalid TF input - Unknown line type');
 }
 
