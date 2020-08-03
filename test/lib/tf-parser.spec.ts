@@ -95,6 +95,17 @@ describe('TF Parser - Multiple resources', () => {
   });
 });
 
+describe('TF Parser - File with terraform object', () => {
+  const multiTF = 'test/fixtures/tf/with-terraform-object.tf';
+  const multiTFContent = readFileSync(multiTF).toString();
+  test('Terraform object', () => {
+    const path: string[] = ['terraform', 'required_version'];
+    expect(
+      issuePathToLineNumber(multiTFContent, CloudConfigFileTypes.TF, path),
+    ).toEqual(6);
+  });
+});
+
 describe('TF Parser - Broken TF', () => {
   test('Broken JSON - cut in the middle of an object', () => {
     const path: string[] = [

@@ -142,8 +142,14 @@ function getTypeDetailsFromLine(
   const lineContent = currentLine.content.split(Charts.space);
   let resourceType = lineContent[1].replace(/"/g, '');
   const objectType = lineContent[0];
+
   if (resourceType === Charts.openBracketsObject) {
-    throw new SyntaxError('Invalid TF input - Type object without sub type');
+    if (objectType === 'terraform') {
+      //Support Terraform settings object
+      resourceType = '';
+    } else {
+      throw new SyntaxError('Invalid TF input - Type object without sub type');
+    }
   }
 
   const headNode: FileStructureNode = getTypeNode(
@@ -152,7 +158,11 @@ function getTypeDetailsFromLine(
     nodes,
   );
 
-  if (lineContent[2] !== null && lineContent[2] !== Charts.openBracketsObject) {
+  if (
+    lineContent[2] &&
+    lineContent[2] !== null &&
+    lineContent[2] !== Charts.openBracketsObject
+  ) {
     const resourceName = lineContent[2].replace(/"/g, '');
     resourceType = `${resourceType}[${resourceName}]`;
   }
