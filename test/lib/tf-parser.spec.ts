@@ -104,6 +104,18 @@ describe('TF Parser - File with terraform object', () => {
       issuePathToLineNumber(multiTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(6);
   });
+
+  test('Terraform object', () => {
+    const path: string[] = [
+      'module',
+      'gke_cluster',
+      'master_authorized_networks_config',
+      'cidr_blocks',
+    ];
+    expect(
+      issuePathToLineNumber(multiTFContent, CloudConfigFileTypes.TF, path),
+    ).toEqual(62);
+  });
 });
 
 describe('TF Parser - Broken TF', () => {

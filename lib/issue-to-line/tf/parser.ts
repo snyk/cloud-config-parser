@@ -40,10 +40,17 @@ export function buildTfTreeMap(tfContent: string): MapsDocIdToTree {
     }
     const lineType = getLineType(line, topType);
 
-    //In case of array value where is multiline and not completed yet - can skip this line
+    // In case of array value where is multiline and not completed yet
+    // or
+    // Object inside array
+    //   -> can skip this line
     if (
       topType === TFLineTypes.ARRAY_START &&
-      lineType !== TFLineTypes.ARRAY_END
+      ![
+        TFLineTypes.ARRAY_END,
+        TFLineTypes.OBJECT_START,
+        TFLineTypes.OBJECT_START_AND_END,
+      ].includes(lineType)
     ) {
       continue;
     }
@@ -86,8 +93,7 @@ export function buildTfTreeMap(tfContent: string): MapsDocIdToTree {
 
       case TFLineTypes.STRING:
       case TFLineTypes.MULTILINE_STRING:
-      case TFLineTypes.ARRAY_START_AND_END:
-      case TFLineTypes.ARRAY_START: {
+      case TFLineTypes.ARRAY_START_AND_END: {
         if (!currNode) {
           throw new SyntaxError(
             'Unexpected TF input - Simple object without parent node',
@@ -96,16 +102,29 @@ export function buildTfTreeMap(tfContent: string): MapsDocIdToTree {
         const simpleNode = getSimpleNode(line);
         (currNode.values as FileStructureNode[]).push(simpleNode);
 
-        if (lineType === TFLineTypes.ARRAY_START) {
-          stateQueue.push({
-            structure: simpleNode,
-            type: lineType,
-          });
-        }
-
         if (lineType === TFLineTypes.MULTILINE_STRING) {
           multiLinePhrase = getMultiLinePhrase(line);
         }
+
+        continue;
+      }
+      case TFLineTypes.ARRAY_START: {
+        if (!currNode) {
+          throw new SyntaxError(
+            'Unexpected TF input - Simple object without parent node',
+          );
+        }
+        const simpleNode = getSimpleNode(line);
+
+        if (simpleNode.values === Charts.openBracketsArray) {
+          simpleNode.values = [];
+        }
+
+        (currNode.values as FileStructureNode[]).push(simpleNode);
+        stateQueue.push({
+          structure: simpleNode,
+          type: lineType,
+        });
 
         continue;
       }
