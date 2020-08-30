@@ -27,6 +27,11 @@ export enum TFLineTypes {
   OBJECT_START_AND_END,
   OBJECT_START,
   OBJECT_END,
+  FUNCTION_START_AND_END,
+  FUNCTION_START,
+  FUNCTION_END,
+
+  IGNORE = 99,
 }
 
 export interface TFState {

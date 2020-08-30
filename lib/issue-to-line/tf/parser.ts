@@ -56,6 +56,8 @@ export function buildTfTreeMap(tfContent: string): MapsDocIdToTree {
     }
 
     switch (lineType) {
+      case TFLineTypes.IGNORE:
+        continue;
       case TFLineTypes.TYPE_START:
         currNode = getTypeDetailsFromLine(line, nodes, stateQueue);
         duringTypeParsing = true;
@@ -78,18 +80,52 @@ export function buildTfTreeMap(tfContent: string): MapsDocIdToTree {
         continue;
 
       case TFLineTypes.OBJECT_START:
-        currNode = getObjectNode(line, stateQueue);
+        currNode = getComplexObjectNode(
+          line,
+          stateQueue,
+          Charts.openBracketsObject,
+          lineType,
+        );
         continue;
 
       case TFLineTypes.OBJECT_START_AND_END:
-        getObjectNode(line, stateQueue);
+        getComplexObjectNode(
+          line,
+          stateQueue,
+          Charts.openBracketsObject,
+          lineType,
+        );
         stateQueue.pop();
         continue;
 
       case TFLineTypes.OBJECT_END: {
-        currNode = handleObjectEnd(currNode, stateQueue);
+        currNode = handleComplexObjectEnd(
+          currNode,
+          stateQueue,
+          TFLineTypes.OBJECT_START,
+        );
         continue;
       }
+
+      case TFLineTypes.FUNCTION_START:
+        currNode = getComplexObjectNode(
+          line,
+          stateQueue,
+          Charts.openFunction,
+          lineType,
+        );
+        continue;
+      case TFLineTypes.FUNCTION_START_AND_END:
+        getComplexObjectNode(line, stateQueue, Charts.openFunction, lineType);
+        stateQueue.pop();
+        continue;
+      case TFLineTypes.FUNCTION_END:
+        currNode = handleComplexObjectEnd(
+          currNode,
+          stateQueue,
+          TFLineTypes.FUNCTION_START,
+        );
+        continue;
 
       case TFLineTypes.STRING:
       case TFLineTypes.MULTILINE_STRING:
@@ -229,14 +265,19 @@ function getSubTypeNode(
   return subHeadNode;
 }
 
-function getObjectNode(line: Line, stateQueue: TFState[]): FileStructureNode {
+function getComplexObjectNode(
+  line: Line,
+  stateQueue: TFState[],
+  splitByChart: string,
+  lineType: TFLineTypes,
+): FileStructureNode {
   const key = line.content
-    .split(Charts.openBracketsObject)[0]
+    .split(splitByChart)[0]
     .split(Charts.equal)[0]
     .trim();
   const objectNode: FileStructureNode = getNode(key, line);
 
-  stateQueue.push({ structure: objectNode, type: TFLineTypes.OBJECT_START });
+  stateQueue.push({ structure: objectNode, type: lineType });
 
   return objectNode;
 }
@@ -246,12 +287,13 @@ function getSimpleNode(line: Line): FileStructureNode {
   return getNode(key.trim(), line, value.trim().replace(/"/g, ''));
 }
 
-function handleObjectEnd(
+function handleComplexObjectEnd(
   currNode: FileStructureNode | null,
   stateQueue: TFState[],
+  startLineType: TFLineTypes,
 ): FileStructureNode {
   let topState = stateQueue[stateQueue.length - 1];
-  if (topState.type !== TFLineTypes.OBJECT_START || stateQueue.length === 0) {
+  if (topState.type !== startLineType || stateQueue.length === 0) {
     throw new SyntaxError('Invalid TF Input - Object end without start');
   }
 
