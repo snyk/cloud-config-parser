@@ -13,6 +13,8 @@ export const Charts = {
   closeBracketsObject: '}',
   openBracketsArray: '[',
   closeBracketsArray: ']',
+  openFunction: '(',
+  closeFunction: ')',
 };
 
 export function getLineState(
@@ -110,6 +112,29 @@ export function getLineType(
     return TFLineTypes.OBJECT_START;
   }
 
+  if (line.content.includes(Charts.openFunction)) {
+    if (line.content.includes(Charts.closeFunction)) {
+      return TFLineTypes.FUNCTION_START_AND_END;
+    }
+    return TFLineTypes.FUNCTION_START;
+  }
+
+  if (line.content.includes(Charts.closeFunction)) {
+    if (currentObjectType != TFLineTypes.FUNCTION_START) {
+      throw new SyntaxError(
+        'Invalid TF input - Close function sign without open function',
+      );
+    }
+    return TFLineTypes.FUNCTION_END;
+  }
+
+  if (currentObjectType === TFLineTypes.FUNCTION_START) {
+    if (line.content.split(Charts.space).length === 1) {
+      return TFLineTypes.IGNORE;
+    }
+    return TFLineTypes.STRING;
+  }
+
   if (line.content.includes(Charts.equal)) {
     return TFLineTypes.STRING;
   }
@@ -132,7 +157,9 @@ export function getLineType(
     return TFLineTypes.STRING;
   }
 
-  throw new SyntaxError('Invalid TF input - Unknown line type');
+  throw new SyntaxError(
+    `Invalid TF input - Unknown line type - ${line.content}`,
+  );
 }
 
 export function getNode(
