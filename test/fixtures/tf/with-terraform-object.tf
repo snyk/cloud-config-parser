@@ -9,6 +9,14 @@ terraform {
   required_version = ">= 0.12.7"
 }
 
+locals {
+  common_tags = {
+    Service     = var.app_name
+    Environment = var.environment
+    Cost_Center = var.tag_cost_center
+  }
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # PREPARE PROVIDERS
 # ---------------------------------------------------------------------------------------------------------------------
