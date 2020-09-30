@@ -38,3 +38,5 @@ export interface TFState {
   structure: FileStructureNode;
   type: TFLineTypes;
 }
+
+export const TerraformValidConfigurationTypes = ['terraform', 'locals'];

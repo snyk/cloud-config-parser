@@ -114,7 +114,18 @@ describe('TF Parser - File with terraform object', () => {
     ];
     expect(
       issuePathToLineNumber(multiTFContent, CloudConfigFileTypes.TF, path),
-    ).toEqual(62);
+    ).toEqual(70);
+  });
+});
+
+describe('TF Parser - File with locals object', () => {
+  const multiTF = 'test/fixtures/tf/with-terraform-object.tf';
+  const multiTFContent = readFileSync(multiTF).toString();
+  test('Locals object existence and parsable', () => {
+    const path: string[] = ['locals', 'common_tags', 'Service'];
+    expect(
+      issuePathToLineNumber(multiTFContent, CloudConfigFileTypes.TF, path),
+    ).toEqual(12);
   });
 });
 

@@ -1,5 +1,11 @@
 import { MapsDocIdToTree, FileStructureNode } from '../../types';
-import { TFLineTypes, TFState, MultiLinePhrase, Line } from './types';
+import {
+  TFLineTypes,
+  TFState,
+  MultiLinePhrase,
+  Line,
+  TerraformValidConfigurationTypes,
+} from './types';
 import {
   Charts,
   getLineState,
@@ -199,8 +205,8 @@ function getTypeDetailsFromLine(
   const objectType = lineContent[0];
 
   if (resourceType === Charts.openBracketsObject) {
-    if (objectType === 'terraform') {
-      //Support Terraform settings object
+    if (TerraformValidConfigurationTypes.includes(objectType)) {
+      //Support Terraform configurations settings object
       resourceType = '';
     } else {
       throw new SyntaxError('Invalid TF input - Type object without sub type');
