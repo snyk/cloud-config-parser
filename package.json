@@ -32,7 +32,6 @@
   "homepage": "https://github.com/snyk/snyk-config-parser#readme",
   "dependencies": {
     "esprima": "^4.0.1",
-    "source-map-support": "^0.5.16",
     "tslib": "^1.10.0",
     "yaml-js": "^0.3.0"
   },
