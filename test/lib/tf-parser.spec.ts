@@ -149,6 +149,16 @@ describe('TF Parser - File with function object', () => {
       issuePathToLineNumber(functionTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(4);
   });
+
+  test('The correct line number is returned for issues found in file with function object', () => {
+    const functionTF = 'test/fixtures/tf/with-function-after-brackets.tf';
+    const functionTFContent = readFileSync(functionTF).toString();
+
+    const path: string[] = ['resource', 'aws_kms_key[efs]', 'is_enabled'];
+    expect(
+      issuePathToLineNumber(functionTFContent, CloudConfigFileTypes.TF, path),
+    ).toEqual(4);
+  });
 });
 
 describe('TF Parser - Broken TF', () => {

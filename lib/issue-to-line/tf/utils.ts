@@ -101,6 +101,13 @@ export function getLineType(
     return TFLineTypes.MULTILINE_STRING;
   }
 
+  if (line.content.includes(Charts.openFunction)) {
+    if (line.content.includes(Charts.closeFunction)) {
+      return TFLineTypes.FUNCTION_START_AND_END;
+    }
+    return TFLineTypes.FUNCTION_START;
+  }
+
   if (line.content.includes(Charts.openBracketsObject)) {
     if (line.content.includes(Charts.closeBracketsObject)) {
       if (line.content.includes(Charts.equal)) {
@@ -110,13 +117,6 @@ export function getLineType(
       return TFLineTypes.OBJECT_START_AND_END;
     }
     return TFLineTypes.OBJECT_START;
-  }
-
-  if (line.content.includes(Charts.openFunction)) {
-    if (line.content.includes(Charts.closeFunction)) {
-      return TFLineTypes.FUNCTION_START_AND_END;
-    }
-    return TFLineTypes.FUNCTION_START;
   }
 
   if (line.content.includes(Charts.closeFunction)) {
