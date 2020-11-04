@@ -232,3 +232,21 @@ describe('YAML Parser - broken YAMLs', () => {
     }
   });
 });
+
+describe('Yaml Parser - Multi-doc file with comments docs', () => {
+  const fileName = 'test/fixtures/yaml/multi_doc_with_commented_docs.yaml';
+  const yamlContent = readFileSync(fileName).toString();
+  test('test third object where the first two objects are comments only', () => {
+    const path: string[] = [
+      '[DocId: 2]',
+      'spec',
+      'selector',
+      'matchLabels',
+      'app.kubernetes.io/name',
+    ];
+
+    expect(
+      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+    ).toEqual(22);
+  });
+});
