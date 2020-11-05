@@ -18,6 +18,9 @@ const SEQ_TAG = 'tag:yaml.org,2002:seq';
 const KEY_NODE_INDEX = 0;
 const VAL_NODE_INDEX = 1;
 
+const COMMENT_CHAR = '#';
+const MULTI_DOC_SEPARATOR = '---';
+
 export function buildYamlTreeMap(yamlContent: string): MapsDocIdToTree {
   const yamlTrees: MapsDocIdToTree = {};
   let docsArray = [];
@@ -25,6 +28,28 @@ export function buildYamlTreeMap(yamlContent: string): MapsDocIdToTree {
     docsArray = yamlJs.compose_all(yamlContent);
   } catch (error) {
     throw new Error('failed to compose_all for given yaml');
+  }
+
+  // Edge case that yamlJs does not handle -
+  // The first lines, before the first doc separator (---) are comments
+  // The yamlJs will ignore this lines and will have 1 less document than expected.
+  // This will only happen for the first document which document object will not be added for
+  if (
+    yamlContent.startsWith(COMMENT_CHAR) &&
+    yamlContent.split(MULTI_DOC_SEPARATOR).length === docsArray.length + 1
+  ) {
+    /* eslint-disable @typescript-eslint/camelcase */
+    // Disable calmecale  - object structure from yamlJs
+    const commentObject = {
+      start_mark: { line: 0, column: 0, pointer: 0, buffer: yamlContent },
+      end_mark: { line: 0, column: 0, pointer: 0, buffer: yamlContent },
+      style: undefined,
+      tag: NULL_TAG,
+      unique_id: 'node_0',
+      value: '',
+    };
+    /* eslint-enable @typescript-eslint/camelcase */
+    docsArray.unshift(commentObject);
   }
 
   for (let i = 0; i < docsArray.length; i++) {
