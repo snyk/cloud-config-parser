@@ -79,7 +79,7 @@ describe('TF Parser - Multiple resources', () => {
       'resource',
       'aws_security_group[allow_ssh_with_valid_cidr]',
       'ingress',
-      'cidr_block',
+      'cidr_blocks',
     ];
     expect(
       issuePathToLineNumber(multiTFContent, CloudConfigFileTypes.TF, path),
@@ -158,6 +158,21 @@ describe('TF Parser - File with function object', () => {
     expect(
       issuePathToLineNumber(functionTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(4);
+  });
+
+  test('The correct line number is returned in the case of 2 fields starting with the same string', () => {
+    const fileName = 'test/fixtures/tf/with_two_references.tf';
+    const tfContent = readFileSync(fileName).toString();
+    const path: string[] = [
+      'resource',
+      'azurerm_virtual_machine[denied_3]',
+      'os_profile',
+      'admin_password',
+    ];
+
+    expect(
+      issuePathToLineNumber(tfContent, CloudConfigFileTypes.TF, path),
+    ).toEqual(9);
   });
 });
 

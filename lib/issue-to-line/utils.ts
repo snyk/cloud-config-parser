@@ -1,8 +1,8 @@
 import {
   CloudConfigFileTypes,
-  PathDetails,
   FileStructureNode,
   LineLocation,
+  PathDetails,
 } from '../types';
 import { buildYamlTreeMap, getPathDetailsForYamlFile } from './yaml/parser';
 import { buildJsonTreeMap } from './json/parser';
@@ -84,7 +84,10 @@ function getNodeForPath(
   path: string,
 ): FileStructureNode | undefined {
   if (!path.includes('[')) {
-    return nodeValues.find((currNode) => currNode.key.startsWith(path));
+    return nodeValues.find(
+      (currNode) =>
+        currNode.key.startsWith(`${path}[`) || currNode.key === path,
+    );
   }
 
   const [nodeName, subNodeName] = path.replace(']', '').split('[');
