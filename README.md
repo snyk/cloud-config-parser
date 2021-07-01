@@ -68,4 +68,4 @@ Are 1 based!
 
 We are looking for the key in the path and not the value.
 
-For example - `drop` may have multiple values as an array of strings. We can show `drop[0]` as the first array of values but not `drop['192.168.0.1']`.
+For example , `drop` may have multiple values as an array of strings. We can show `drop[0]` as the first array of values but not `drop['192.168.0.1']`.
