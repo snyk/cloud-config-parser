@@ -6,6 +6,7 @@ import {
   PathDetails,
 } from '../../types';
 import { getLineLocationForYamlElement, removeInputPathPrefix } from '../utils';
+import { CommentObject, YamlNodeElement } from './types';
 
 const NULL_TAG = 'tag:yaml.org,2002:null';
 const STR_TAG = 'tag:yaml.org,2002:str';
@@ -23,7 +24,7 @@ const MULTI_DOC_SEPARATOR = '---';
 
 export function buildYamlTreeMap(yamlContent: string): MapsDocIdToTree {
   const yamlTrees: MapsDocIdToTree = {};
-  let docsArray = [];
+  let docsArray: CommentObject[] = [];
   try {
     docsArray = yamlJs.compose_all(yamlContent);
   } catch (error) {
@@ -39,8 +40,8 @@ export function buildYamlTreeMap(yamlContent: string): MapsDocIdToTree {
     yamlContent.split(MULTI_DOC_SEPARATOR).length === docsArray.length + 1
   ) {
     /* eslint-disable @typescript-eslint/camelcase */
-    // Disable calmecale  - object structure from yamlJs
-    const commentObject = {
+    // Disable camelcase  - object structure from yamlJs
+    const commentObject: CommentObject = {
       start_mark: { line: 0, column: 0, pointer: 0, buffer: yamlContent },
       end_mark: { line: 0, column: 0, pointer: 0, buffer: yamlContent },
       style: undefined,

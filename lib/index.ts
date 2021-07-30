@@ -1,3 +1,3 @@
 export { CloudConfigFileTypes } from './types';
 
-export { issuePathToLineNumber as issuesToLineNumbers } from './issue-to-line';
+export { issuesToLineNumbers, getTrees, getLineNumber } from './issue-to-line';

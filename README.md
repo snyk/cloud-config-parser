@@ -9,9 +9,29 @@ This library is being used as part of snyk cloud configuration product.
 
 ## How it works
 
-The library receives a path (array of strings), a file type (YAML/JSON/HCL), and the configuration file content and it returns the number of the line which is the closest to the path received.
-In case that the full path does not exist - the returned line number will correspond to the deepest entry in the path array that was found.
+The library has two main methods:
+1. `getTrees` - this function receives a fileType and a configuration fileContent and builds the relevant tree (FileStructureTree). An example tree would look like this:
+```   
+   '0': {
+      nodes: [
+         {
+            key: 'apiVersion',
+            lineLocation: {
+            columnEnd: 14,
+            columnStart: 4,
+            line: 2,
+         },
+         values: [...],
+         {...},
+      ],
+   '1': {...}
+   ...
+   },
+   ```
+2. `getLineNumber`- this function receives a path (array of strings) , a fileType (YAML/JSON/HCL), and a tree and returns the number of the line which is the closest to the path received.
+   In case that the full path does not exist, the returned line number will correspond to the deepest entry in the path array that was found.
 
+The function `issuesToLineNumbers` invokes both of them: it will build the tree by parsing the fileContent and then return the lineNumber.
 
 ## Examples:  
 

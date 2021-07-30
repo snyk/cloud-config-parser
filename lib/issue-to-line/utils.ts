@@ -4,6 +4,7 @@ import {
   LineLocation,
   PathDetails,
 } from '../types';
+import { YamlNodeElement } from './yaml/types';
 import { buildYamlTreeMap, getPathDetailsForYamlFile } from './yaml/parser';
 import { buildJsonTreeMap } from './json/parser';
 import { buildTfTreeMap } from './tf/parser';
