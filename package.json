@@ -18,7 +18,7 @@
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/snyk/snyk-config-parser"
+    "url": "https://github.com/snyk/cloud-config-parser"
   },
   "author": "snyk.io",
   "license": "Apache-2.0",
@@ -29,7 +29,7 @@
     "bin",
     "dist"
   ],
-  "homepage": "https://github.com/snyk/snyk-config-parser#readme",
+  "homepage": "https://github.com/snyk/cloud-config-parser#readme",
   "dependencies": {
     "esprima": "^4.0.1",
     "tslib": "^1.10.0",
