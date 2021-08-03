@@ -1,6 +1,5 @@
 import { readFileSync } from 'fs';
-import { issuePathToLineNumber } from '../../lib/issue-to-line/index';
-import { CloudConfigFileTypes } from '../../lib/types';
+import { issuesToLineNumbers, CloudConfigFileTypes } from '../../lib';
 
 describe('Yaml Parser', () => {
   const fileName = 'test/fixtures/yaml/multi.yaml';
@@ -15,7 +14,7 @@ describe('Yaml Parser', () => {
     ];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(27);
   });
 
@@ -28,7 +27,7 @@ describe('Yaml Parser', () => {
     ];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(26);
   });
 
@@ -45,7 +44,7 @@ describe('Yaml Parser', () => {
     ];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(75);
   });
 
@@ -62,7 +61,7 @@ describe('Yaml Parser', () => {
     ];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(75);
   });
 
@@ -80,7 +79,7 @@ describe('Yaml Parser', () => {
     ];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(78);
   });
 
@@ -97,7 +96,7 @@ describe('Yaml Parser', () => {
     ];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(74);
   });
 
@@ -114,7 +113,7 @@ describe('Yaml Parser', () => {
     ];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(55);
   });
 
@@ -122,7 +121,7 @@ describe('Yaml Parser', () => {
     const path: string[] = ['[DocId: 0]', 'specs'];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(2);
   });
 
@@ -130,7 +129,7 @@ describe('Yaml Parser', () => {
     const path: string[] = ['[DocId: 0]', 'specs', 'selector'];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(2);
   });
 
@@ -138,7 +137,7 @@ describe('Yaml Parser', () => {
     const path: string[] = ['[DocId: 1]', 'specs'];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(31);
   });
 
@@ -146,7 +145,7 @@ describe('Yaml Parser', () => {
     const path: string[] = ['spec', 'selector', 'app.kubernetes.io/name'];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(27);
   });
 
@@ -154,7 +153,7 @@ describe('Yaml Parser', () => {
     const path: string[] = ['[DocId: 2]', 'spec', 'allowedCapabilities'];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(126);
   });
 });
@@ -172,7 +171,7 @@ describe('Yaml Parser - Single document', () => {
     ];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(27);
   });
 });
@@ -184,7 +183,7 @@ describe('YAML Parser - broken YAMLs', () => {
     const filePath = 'test/fixtures/yaml/broken-object.yaml';
     const fileContent = readFileSync(filePath).toString();
     expect(() => {
-      issuePathToLineNumber(fileContent, CloudConfigFileTypes.YAML, path);
+      issuesToLineNumbers(fileContent, CloudConfigFileTypes.YAML, path);
     }).not.toThrow();
   });
 
@@ -195,7 +194,7 @@ describe('YAML Parser - broken YAMLs', () => {
     const fileContent = readFileSync(filePath).toString();
 
     expect(() => {
-      issuePathToLineNumber(fileContent, CloudConfigFileTypes.YAML, path);
+      issuesToLineNumbers(fileContent, CloudConfigFileTypes.YAML, path);
     }).toThrowError('failed to compose_all for given yaml');
   });
 
@@ -206,7 +205,7 @@ describe('YAML Parser - broken YAMLs', () => {
     const fileContent = readFileSync(filePath).toString();
 
     expect(() => {
-      issuePathToLineNumber(fileContent, CloudConfigFileTypes.YAML, path);
+      issuesToLineNumbers(fileContent, CloudConfigFileTypes.YAML, path);
     }).not.toThrow();
   });
 
@@ -216,7 +215,7 @@ describe('YAML Parser - broken YAMLs', () => {
     const InvalidChars = ['', ' '];
     for (const brokenJson of InvalidChars) {
       expect(() => {
-        issuePathToLineNumber(brokenJson, CloudConfigFileTypes.YAML, path);
+        issuesToLineNumbers(brokenJson, CloudConfigFileTypes.YAML, path);
       }).toThrowError('failed to create trees');
     }
   });
@@ -227,7 +226,7 @@ describe('YAML Parser - broken YAMLs', () => {
     const InvalidChars = ['"', '{', '[', '}', ']', "'"];
     for (const brokenJson of InvalidChars) {
       expect(() => {
-        issuePathToLineNumber(brokenJson, CloudConfigFileTypes.YAML, path);
+        issuesToLineNumbers(brokenJson, CloudConfigFileTypes.YAML, path);
       }).toThrowError('failed to compose_all for given yaml');
     }
   });
@@ -246,7 +245,7 @@ describe('Yaml Parser - Multi-doc file with comments docs', () => {
     ];
 
     expect(
-      issuePathToLineNumber(yamlContent, CloudConfigFileTypes.YAML, path),
+      issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
     ).toEqual(22);
   });
 });

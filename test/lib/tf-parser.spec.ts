@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { issuePathToLineNumber } from '../../lib/issue-to-line/index';
+import { issuesToLineNumbers } from '../../lib/issue-to-line/index';
 import { CloudConfigFileTypes } from '../../lib/types';
 
 describe('TF Parser - working TF file with comments - single resource', () => {
@@ -14,7 +14,7 @@ describe('TF Parser - working TF file with comments - single resource', () => {
     ];
 
     expect(
-      issuePathToLineNumber(simpleTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(simpleTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(19);
   });
 
@@ -27,7 +27,7 @@ describe('TF Parser - working TF file with comments - single resource', () => {
     ];
 
     expect(
-      issuePathToLineNumber(simpleTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(simpleTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(25);
   });
 
@@ -40,7 +40,7 @@ describe('TF Parser - working TF file with comments - single resource', () => {
     ];
 
     expect(
-      issuePathToLineNumber(simpleTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(simpleTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(28);
   });
 
@@ -48,7 +48,7 @@ describe('TF Parser - working TF file with comments - single resource', () => {
     const path: string[] = ['provider', 'aws', 'region'];
 
     expect(
-      issuePathToLineNumber(simpleTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(simpleTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(3);
   });
 });
@@ -59,7 +59,7 @@ describe('TF Parser - Multiple resources', () => {
   test('First resource in multi resource env', () => {
     const path: string[] = ['resource', 'aws_vpc[default]', 'cidr_block'];
     expect(
-      issuePathToLineNumber(multiTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(multiTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(8);
   });
 
@@ -70,7 +70,7 @@ describe('TF Parser - Multiple resources', () => {
       'vpc_id',
     ];
     expect(
-      issuePathToLineNumber(multiTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(multiTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(13);
   });
 
@@ -82,7 +82,7 @@ describe('TF Parser - Multiple resources', () => {
       'cidr_blocks',
     ];
     expect(
-      issuePathToLineNumber(multiTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(multiTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(38);
   });
 
@@ -90,7 +90,7 @@ describe('TF Parser - Multiple resources', () => {
     const path: string[] = ['provider', 'aws', 'region'];
 
     expect(
-      issuePathToLineNumber(multiTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(multiTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(3);
   });
 });
@@ -101,7 +101,7 @@ describe('TF Parser - File with terraform object', () => {
   test('Terraform object', () => {
     const path: string[] = ['terraform', 'required_version'];
     expect(
-      issuePathToLineNumber(multiTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(multiTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(6);
   });
 
@@ -113,7 +113,7 @@ describe('TF Parser - File with terraform object', () => {
       'cidr_blocks',
     ];
     expect(
-      issuePathToLineNumber(multiTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(multiTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(70);
   });
 });
@@ -124,7 +124,7 @@ describe('TF Parser - File with locals object', () => {
   test('Locals object existence and parsable', () => {
     const path: string[] = ['locals', 'common_tags', 'Service'];
     expect(
-      issuePathToLineNumber(multiTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(multiTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(12);
   });
 });
@@ -136,7 +136,7 @@ describe('TF Parser - File with function object', () => {
 
     const path: string[] = ['resource', 'aws_kms_key[efs]', 'is_enabled'];
     expect(
-      issuePathToLineNumber(functionTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(functionTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(4);
   });
 
@@ -146,7 +146,7 @@ describe('TF Parser - File with function object', () => {
 
     const path: string[] = ['resource', 'aws_kms_key[efs]', 'is_enabled'];
     expect(
-      issuePathToLineNumber(functionTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(functionTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(4);
   });
 
@@ -156,7 +156,7 @@ describe('TF Parser - File with function object', () => {
 
     const path: string[] = ['resource', 'aws_kms_key[efs]', 'is_enabled'];
     expect(
-      issuePathToLineNumber(functionTFContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(functionTFContent, CloudConfigFileTypes.TF, path),
     ).toEqual(4);
   });
 
@@ -171,7 +171,7 @@ describe('TF Parser - File with function object', () => {
     ];
 
     expect(
-      issuePathToLineNumber(tfContent, CloudConfigFileTypes.TF, path),
+      issuesToLineNumbers(tfContent, CloudConfigFileTypes.TF, path),
     ).toEqual(9);
   });
 });
@@ -187,7 +187,7 @@ describe('TF Parser - Broken TF', () => {
     const filePath = 'test/fixtures/tf/broken-object.tf';
     const fileContent = readFileSync(filePath).toString();
     expect(() => {
-      issuePathToLineNumber(fileContent, CloudConfigFileTypes.TF, path);
+      issuesToLineNumbers(fileContent, CloudConfigFileTypes.TF, path);
     }).toThrowError('Invalid TF input');
   });
 
@@ -201,7 +201,7 @@ describe('TF Parser - Broken TF', () => {
     const filePath = 'test/fixtures/tf/broken-invalid-type.tf';
     const fileContent = readFileSync(filePath).toString();
     expect(() => {
-      issuePathToLineNumber(fileContent, CloudConfigFileTypes.TF, path);
+      issuesToLineNumbers(fileContent, CloudConfigFileTypes.TF, path);
     }).toThrowError('Invalid TF input');
   });
 
@@ -209,7 +209,7 @@ describe('TF Parser - Broken TF', () => {
     const path: string[] = ['resource', 'aws_security_group[allow_tcp]'];
 
     expect(() => {
-      issuePathToLineNumber('', CloudConfigFileTypes.TF, path);
+      issuesToLineNumbers('', CloudConfigFileTypes.TF, path);
     }).toThrowError('Invalid TF input');
   });
 });

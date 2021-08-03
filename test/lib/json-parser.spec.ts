@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { issuePathToLineNumber } from '../../lib/issue-to-line/index';
+import { issuesToLineNumbers } from '../../lib/issue-to-line/index';
 import { CloudConfigFileTypes } from '../../lib/types';
 
 describe('JSON Parser - working JSONS', () => {
@@ -10,7 +10,7 @@ describe('JSON Parser - working JSONS', () => {
     const path: string[] = ['spec', 'selector', 'app.kubernetes.io/name'];
 
     expect(
-      issuePathToLineNumber(simpleJsonContent, CloudConfigFileTypes.JSON, path),
+      issuesToLineNumbers(simpleJsonContent, CloudConfigFileTypes.JSON, path),
     ).toEqual(19);
   });
 
@@ -18,7 +18,7 @@ describe('JSON Parser - working JSONS', () => {
     const path: string[] = ['spec', 'selector', 'app.kubernetes.io/notExist'];
 
     expect(
-      issuePathToLineNumber(simpleJsonContent, CloudConfigFileTypes.JSON, path),
+      issuesToLineNumbers(simpleJsonContent, CloudConfigFileTypes.JSON, path),
     ).toEqual(18);
   });
 
@@ -33,7 +33,7 @@ describe('JSON Parser - working JSONS', () => {
     ];
 
     expect(
-      issuePathToLineNumber(simpleJsonContent, CloudConfigFileTypes.JSON, path),
+      issuesToLineNumbers(simpleJsonContent, CloudConfigFileTypes.JSON, path),
     ).toEqual(56);
   });
 
@@ -48,7 +48,7 @@ describe('JSON Parser - working JSONS', () => {
     ];
 
     expect(
-      issuePathToLineNumber(simpleJsonContent, CloudConfigFileTypes.JSON, path),
+      issuesToLineNumbers(simpleJsonContent, CloudConfigFileTypes.JSON, path),
     ).toEqual(56);
   });
 
@@ -64,7 +64,7 @@ describe('JSON Parser - working JSONS', () => {
     ];
 
     expect(
-      issuePathToLineNumber(simpleJsonContent, CloudConfigFileTypes.JSON, path),
+      issuesToLineNumbers(simpleJsonContent, CloudConfigFileTypes.JSON, path),
     ).toEqual(58);
   });
 
@@ -80,7 +80,7 @@ describe('JSON Parser - working JSONS', () => {
     ];
 
     expect(
-      issuePathToLineNumber(simpleJsonContent, CloudConfigFileTypes.JSON, path),
+      issuesToLineNumbers(simpleJsonContent, CloudConfigFileTypes.JSON, path),
     ).toEqual(90);
   });
 
@@ -95,7 +95,7 @@ describe('JSON Parser - working JSONS', () => {
     ];
 
     expect(
-      issuePathToLineNumber(simpleJsonContent, CloudConfigFileTypes.JSON, path),
+      issuesToLineNumbers(simpleJsonContent, CloudConfigFileTypes.JSON, path),
     ).toEqual(55);
   });
 
@@ -110,7 +110,7 @@ describe('JSON Parser - working JSONS', () => {
     ];
 
     expect(
-      issuePathToLineNumber(simpleJsonContent, CloudConfigFileTypes.JSON, path),
+      issuesToLineNumbers(simpleJsonContent, CloudConfigFileTypes.JSON, path),
     ).toEqual(31);
   });
 });
@@ -122,7 +122,7 @@ describe('JSON Parser - broken JSONS', () => {
     const filePath = 'test/fixtures/json/broken-object.json';
     const fileContent = readFileSync(filePath).toString();
     expect(() => {
-      issuePathToLineNumber(fileContent, CloudConfigFileTypes.JSON, path);
+      issuesToLineNumbers(fileContent, CloudConfigFileTypes.JSON, path);
     }).toThrowError('unexpected end of JSON input');
   });
 
@@ -133,7 +133,7 @@ describe('JSON Parser - broken JSONS', () => {
     const fileContent = readFileSync(filePath).toString();
 
     expect(() => {
-      issuePathToLineNumber(fileContent, CloudConfigFileTypes.JSON, path);
+      issuesToLineNumbers(fileContent, CloudConfigFileTypes.JSON, path);
     }).toThrowError('unexpected end of JSON input');
   });
 
@@ -144,7 +144,7 @@ describe('JSON Parser - broken JSONS', () => {
     const fileContent = readFileSync(filePath).toString();
 
     expect(() => {
-      issuePathToLineNumber(fileContent, CloudConfigFileTypes.JSON, path);
+      issuesToLineNumbers(fileContent, CloudConfigFileTypes.JSON, path);
     }).toThrowError('unexpected end of JSON input');
   });
 
@@ -152,7 +152,7 @@ describe('JSON Parser - broken JSONS', () => {
     const path: string[] = ['specs'];
 
     expect(() => {
-      issuePathToLineNumber('', CloudConfigFileTypes.JSON, path);
+      issuesToLineNumbers('', CloudConfigFileTypes.JSON, path);
     }).toThrowError('unexpected end of JSON input');
   });
 
@@ -162,7 +162,7 @@ describe('JSON Parser - broken JSONS', () => {
     const InvalidChars = ['', ' ', '{', '['];
     for (const brokenJson of InvalidChars) {
       expect(() => {
-        issuePathToLineNumber(brokenJson, CloudConfigFileTypes.JSON, path);
+        issuesToLineNumbers(brokenJson, CloudConfigFileTypes.JSON, path);
       }).toThrowError('unexpected end of JSON input');
     }
   });
@@ -173,7 +173,7 @@ describe('JSON Parser - broken JSONS', () => {
     const InvalidChars = ["'", '"'];
     for (const brokenJson of InvalidChars) {
       expect(() => {
-        issuePathToLineNumber(brokenJson, CloudConfigFileTypes.JSON, path);
+        issuesToLineNumbers(brokenJson, CloudConfigFileTypes.JSON, path);
       }).toThrowError('Line 1: Unexpected token ILLEGAL');
     }
   });
@@ -184,7 +184,7 @@ describe('JSON Parser - broken JSONS', () => {
     const InvalidChars = ['}', ']'];
     for (const brokenJson of InvalidChars) {
       expect(() => {
-        issuePathToLineNumber(brokenJson, CloudConfigFileTypes.JSON, path);
+        issuesToLineNumbers(brokenJson, CloudConfigFileTypes.JSON, path);
       }).toThrowError('failed to find type Punctuator');
     }
   });
