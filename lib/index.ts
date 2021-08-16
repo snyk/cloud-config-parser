@@ -1,3 +1,3 @@
-export { CloudConfigFileTypes } from './types';
+export { CloudConfigFileTypes, MapsDocIdToTree } from './types';
 
 export { issuesToLineNumbers, getTrees, getLineNumber } from './issue-to-line';
