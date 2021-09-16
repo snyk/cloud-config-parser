@@ -5,11 +5,13 @@
 
 A utility library for identifying the issue path in a YAML/JSON/HCL file and returning the relevant line number in order to highlight the relevant line to the users in their files.
 
+It also exposes a customised YAML parser.
+
 This library is being used as part of snyk cloud configuration product.
 
 ## How it works
 
-The library has two main methods:
+The library has three main methods:
 1. `getTrees` - this function receives a fileType and a configuration fileContent and builds the relevant tree (FileStructureTree). An example tree would look like this:
 ```   
    '0': {
@@ -32,6 +34,10 @@ The library has two main methods:
    In case that the full path does not exist, the returned line number will correspond to the deepest entry in the path array that was found.
 
 The function `issuesToLineNumbers` invokes both of them: it will build the tree by parsing the fileContent and then return the lineNumber.
+
+3. `parseFileContent`- this function receives the contents of a file and returns the parsed JSON representation of the contents.
+   The file contents can be either YAML or JSON.
+   **Note** This parser uses a different underlying parser to the `getTrees` function - the implementation of `getTrees` will change once we replace the `yaml-js` parser with this one.
 
 ## Examples:  
 
