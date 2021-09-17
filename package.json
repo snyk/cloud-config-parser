@@ -33,6 +33,7 @@
   "dependencies": {
     "esprima": "^4.0.1",
     "tslib": "^1.10.0",
+    "yaml": "^1.10.2",
     "yaml-js": "^0.3.0"
   },
   "devDependencies": {
