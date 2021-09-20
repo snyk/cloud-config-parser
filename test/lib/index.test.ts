@@ -18,6 +18,16 @@ describe('issuePathToLineNumber', () => {
 });
 
 describe('parseFileContent', () => {
+  it('Throws an error if it contains \\/', () => {
+    /* eslint-disable no-useless-escape */
+    expect(() => {
+      parseFileContent(`{
+  "foo": "\\/"
+}`);
+    }).toThrowError('Found escape character \\/.');
+    /* eslint-enable no-useless-escape */
+  });
+
   it('Throws an error if keys are not simple strings', () => {
     expect(() => {
       parseFileContent(`---

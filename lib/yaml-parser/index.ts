@@ -1,6 +1,10 @@
 import * as YAML from 'yaml';
 
 export function parseFileContent(fileContent: string): any[] {
+  // YAML should fail on \/ but the library doesn't: https://snyksec.atlassian.net/browse/CC-1175
+  if (fileContent.includes('\\/')) {
+    throw new Error('Found escape character \\/.');
+  }
   // the YAML library can parse both YAML and JSON content, as well as content with singe/multiple YAMLs
   // by using this library we don't have to disambiguate between these different contents ourselves
   return YAML.parseAllDocuments(fileContent).map((doc) => {
