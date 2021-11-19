@@ -109,4 +109,16 @@ foo: "baz"`),
       parseFileContent('{"foo": "bar"');
     }).toThrowError('Expected flow map to end with }');
   });
+
+  it('Parses Helm template call', async () => {
+    expect(
+      parseFileContent(`---
+name: {{ .Values.something.name }}
+        `),
+    ).toEqual([
+      {
+        name: '{{ .Values.something.name }}',
+      },
+    ]);
+  });
 });
