@@ -1,11 +1,16 @@
 version: 2.1
-
+orbs:
+  snyk: snyk/snyk@1.1.1
+only_branches: &only_branches
+  filters:
+    branches:
+      ignore:
+        - master
 defaults: &defaults
   resource_class: small
   docker:
     - image: node:14-buster
   working_directory: ~/snyk-config-parser
-
 commands:
   install_deps:
     description: Install dependencies
@@ -96,7 +101,30 @@ jobs:
       - run:
           name: Release on GitHub
           command: npx semantic-release
-
+  security-oss:
+    docker:
+      - image: cimg/node:17.0.1
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - snyk/scan:
+          severity-threshold: medium 
+          monitor-on-build: true
+          project: ${CIRCLE_PROJECT_REPONAME}
+          organization: snyk-iac-group-seceng
+  security-code:
+    docker:
+      - image: cimg/node:17.0.1
+    steps:
+      - checkout
+      - snyk/scan:
+          command: code test
+          severity-threshold: medium 
+          monitor-on-build: false
+          project: ${CIRCLE_PROJECT_REPONAME}
+          organization: snyk-iac-group-seceng
 workflows:
   version: 2
   test_and_release:
@@ -104,36 +132,34 @@ workflows:
       - install:
           name: Install
           context: nodejs-install
-          filters:
-            branches:
-              ignore:
-                - master
+          <<: *only_branches
       - lint:
           name: Lint
           context: nodejs-install
           requires:
             - Install
-          filters:
-            branches:
-              ignore:
-                - master
+          <<: *only_branches
       - build:
           name: Build
           requires:
             - Install
-          filters:
-            branches:
-              ignore:
-                - master
+          <<: *only_branches
       - test:
           name: Test
           context: nodejs-install
           requires:
             - Install
-          filters:
-            branches:
-              ignore:
-                - master
+          <<: *only_branches
+      - security-oss:
+          name: Snyk test
+          context:
+            - snyk-iac-seceng
+          <<: *only_branches
+      - security-code:
+          name: Snyk code
+          context:
+            - snyk-iac-seceng
+          <<: *only_branches
       - release:
           name: Release to GitHub
           context: nodejs-lib-release
