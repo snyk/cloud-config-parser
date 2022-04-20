@@ -15,6 +15,7 @@ const FLOAT_TAG = 'tag:yaml.org,2002:float';
 const BOOL_TAG = 'tag:yaml.org,2002:bool';
 const MAP_TAG = 'tag:yaml.org,2002:map';
 const SEQ_TAG = 'tag:yaml.org,2002:seq';
+const TIMESTAMP_TAG = 'tag:yaml.org,2002:timestamp';
 
 const KEY_NODE_INDEX = 0;
 const VAL_NODE_INDEX = 1;
@@ -94,6 +95,7 @@ function buildTreeBranch(
     case INT_TAG:
     case FLOAT_TAG:
     case BOOL_TAG:
+    case TIMESTAMP_TAG:
       return buildPrimitiveLeaf(yamlElements);
     case MAP_TAG:
       return buildMapBranch(yamlElements, path);
