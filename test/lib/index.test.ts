@@ -1,6 +1,10 @@
-import { parseFileContent } from '../../lib';
-import { issuesToLineNumbers } from '../../lib/issue-to-line';
-import { CloudConfigFileTypes } from '../../lib/types';
+import {
+  CloudConfigFileTypes,
+  issuesToLineNumbers,
+  parseFileContent,
+} from '../../lib';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const dumyFileContent = 'dumy';
 const dumyPath = ['dumy'];
@@ -14,6 +18,19 @@ describe('issuePathToLineNumber', () => {
         dumyPath,
       );
     }).toThrowError('Unknown format');
+  });
+
+  it('returns first node if it can not match the path ', () => {
+    const cloudformationContent = fs
+      .readFileSync(
+        path.resolve(__dirname, './issue-to-line/fixtures/cfn-example.yaml'),
+      )
+      .toString();
+    expect(
+      issuesToLineNumbers(cloudformationContent, CloudConfigFileTypes.YAML, [
+        'path',
+      ]),
+    ).toEqual(2);
   });
 });
 
