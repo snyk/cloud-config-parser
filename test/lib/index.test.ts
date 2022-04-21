@@ -30,7 +30,7 @@ describe('issuePathToLineNumber', () => {
       issuesToLineNumbers(cloudformationContent, CloudConfigFileTypes.YAML, [
         'path',
       ]),
-    ).toEqual(2);
+    ).toEqual(-1);
   });
 });
 
