@@ -5,7 +5,8 @@ type TagTypes =
   | 'tag:yaml.org,2002:float'
   | 'tag:yaml.org,2002:bool'
   | 'tag:yaml.org,2002:map'
-  | 'tag:yaml.org,2002:seq';
+  | 'tag:yaml.org,2002:seq'
+  | 'tag:yaml.org,2002:timestamp';
 
 export interface YamlNodeElement {
   id: string;
