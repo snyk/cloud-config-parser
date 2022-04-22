@@ -19,7 +19,7 @@ describe('JSON Parser - working JSONS', () => {
 
     expect(
       issuesToLineNumbers(simpleJsonContent, CloudConfigFileTypes.JSON, path),
-    ).toEqual(18);
+    ).toEqual(-1);
   });
 
   test('Path with array - full path exists', () => {
@@ -96,7 +96,7 @@ describe('JSON Parser - working JSONS', () => {
 
     expect(
       issuesToLineNumbers(simpleJsonContent, CloudConfigFileTypes.JSON, path),
-    ).toEqual(55);
+    ).toEqual(-1);
   });
 
   test('Path with array - full path not exists - stops at array', () => {
@@ -111,7 +111,7 @@ describe('JSON Parser - working JSONS', () => {
 
     expect(
       issuesToLineNumbers(simpleJsonContent, CloudConfigFileTypes.JSON, path),
-    ).toEqual(31);
+    ).toEqual(-1);
   });
 });
 

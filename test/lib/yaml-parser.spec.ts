@@ -28,7 +28,7 @@ describe('Yaml Parser', () => {
 
     expect(
       issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
-    ).toEqual(26);
+    ).toEqual(-1);
   });
 
   test('Path with array - full path exists', () => {
@@ -97,7 +97,7 @@ describe('Yaml Parser', () => {
 
     expect(
       issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
-    ).toEqual(74);
+    ).toEqual(-1);
   });
 
   test('Path with array - full path not exists - stops at array', () => {
@@ -114,7 +114,7 @@ describe('Yaml Parser', () => {
 
     expect(
       issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
-    ).toEqual(55);
+    ).toEqual(-1);
   });
 
   test('Path without array - path not exists - 1 item', () => {
@@ -122,7 +122,7 @@ describe('Yaml Parser', () => {
 
     expect(
       issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
-    ).toEqual(2);
+    ).toEqual(-1);
   });
 
   test('Path not exists - 1 item, on first document', () => {
@@ -130,7 +130,7 @@ describe('Yaml Parser', () => {
 
     expect(
       issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
-    ).toEqual(2);
+    ).toEqual(-1);
   });
 
   test('Path not exists - 1 item, on second document', () => {
@@ -138,7 +138,7 @@ describe('Yaml Parser', () => {
 
     expect(
       issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
-    ).toEqual(31);
+    ).toEqual(-1);
   });
 
   test('No DocId - default DocId: 0', () => {
