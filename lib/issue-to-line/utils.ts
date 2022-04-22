@@ -69,8 +69,8 @@ function getLineNumberForSingleNode(
 
     const nodeForPath = getNodeForPath(node.values, remainingPath[0]);
     if (!nodeForPath) {
-      // If the path does not exist, we will return '-1'
-      return -1;
+      //Not exists
+      return node.lineLocation.line;
     }
 
     node = nodeForPath;
