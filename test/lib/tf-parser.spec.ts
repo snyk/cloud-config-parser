@@ -41,7 +41,7 @@ describe('TF Parser - working TF file with comments - single resource', () => {
 
     expect(
       issuesToLineNumbers(simpleTFContent, CloudConfigFileTypes.TF, path),
-    ).toEqual(-1);
+    ).toEqual(28);
   });
 
   test('Path provider - type without name', () => {
@@ -102,7 +102,7 @@ describe('TF Parser - File with terraform object', () => {
     const path: string[] = ['terraform', 'required_version'];
     expect(
       issuesToLineNumbers(multiTFContent, CloudConfigFileTypes.TF, path),
-    ).toEqual(-1);
+    ).toEqual(6);
   });
 
   test('Terraform object', () => {
@@ -125,7 +125,7 @@ describe('TF Parser - File with locals object', () => {
     const path: string[] = ['locals', 'common_tags', 'Service'];
     expect(
       issuesToLineNumbers(multiTFContent, CloudConfigFileTypes.TF, path),
-    ).toEqual(-1);
+    ).toEqual(12);
   });
 });
 
@@ -172,7 +172,7 @@ describe('TF Parser - File with function object', () => {
 
     expect(
       issuesToLineNumbers(tfContent, CloudConfigFileTypes.TF, path),
-    ).toEqual(-1);
+    ).toEqual(9);
   });
 });
 

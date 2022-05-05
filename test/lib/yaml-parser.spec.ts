@@ -28,7 +28,7 @@ describe('Yaml Parser', () => {
 
     expect(
       issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
-    ).toEqual(-1);
+    ).toEqual(26);
   });
 
   test('Path with array - full path exists', () => {
@@ -97,7 +97,7 @@ describe('Yaml Parser', () => {
 
     expect(
       issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
-    ).toEqual(-1);
+    ).toEqual(74);
   });
 
   test('Path with array - full path not exists - stops at array', () => {
@@ -114,7 +114,7 @@ describe('Yaml Parser', () => {
 
     expect(
       issuesToLineNumbers(yamlContent, CloudConfigFileTypes.YAML, path),
-    ).toEqual(-1);
+    ).toEqual(55);
   });
 
   test('Path without array - path not exists - 1 item', () => {
