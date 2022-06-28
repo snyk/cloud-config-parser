@@ -1,0 +1,19 @@
+# Documentation: https://www.notion.so/snyk/Entity-Metadata-1e313ca03f954a6680b2b6b7b3d95297
+# Validation Tool: https://github.com/snyk/prodsec-github-bot
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cloud-config-parser
+  annotations:
+    github.com/project-slug: snyk/cloud-config-parser
+    circleci.com/project-slug: github/snyk/cloud-config-parser
+  description: <
+    A TypeScript library that exposes functions for parsing Infrastructure as Code configuration files for computing the line number.
+  labels:
+    snyk.io/businessCriticality: low
+    snyk.io/visibility: public
+    snyk.io/metadata-version: "2022-23-01"
+spec:
+  type: library
+  lifecycle: production
+  owner: "group-infrastructure-as-code"
