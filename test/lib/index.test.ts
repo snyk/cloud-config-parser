@@ -35,39 +35,12 @@ describe('issuePathToLineNumber', () => {
 });
 
 describe('parseFileContent', () => {
-  it('Throws an error if no file type provided and it contains \\/', () => {
-    /* eslint-disable no-useless-escape */
-    expect(() => {
-      parseFileContent(`foo: "\\/"`);
-    }).toThrowError('Found escape character \\/.');
-    /* eslint-enable no-useless-escape */
-  });
-
-  it('Throws an error if YAML and it contains \\/', () => {
-    /* eslint-disable no-useless-escape */
-    expect(() => {
-      parseFileContent(`foo: "\\/"`, 'yaml');
-    }).toThrowError('Found escape character \\/.');
-    /* eslint-enable no-useless-escape */
-  });
-
-  it('Throws an error if YAML and it contains \\/', () => {
-    /* eslint-disable no-useless-escape */
-    expect(() => {
-      parseFileContent(`foo: "\\/"`, 'yml');
-    }).toThrowError('Found escape character \\/.');
-    /* eslint-enable no-useless-escape */
-  });
-
-  it('Succeeds an error if JSON and it contains \\/', () => {
+  it('Succeeds if YAML and it contains \\/', () => {
     /* eslint-disable no-useless-escape */
     expect(
-      parseFileContent(
-        `{
-  "foo": "\\/"
-}`,
-        'json',
-      ),
+      parseFileContent(`{
+"foo": "\\/"
+}`),
     ).toEqual([
       {
         foo: '/', // "\\/" is the equivalent of '/'
