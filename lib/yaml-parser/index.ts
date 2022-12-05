@@ -2,9 +2,16 @@ import * as YAML from 'yaml';
 
 export type ParserFileType = 'json' | 'yaml' | 'yml';
 
-export function parseFileContent(fileContent: string): any[] {
+export function parseFileContent(
+  fileContent: string,
+  fileType: ParserFileType = 'yaml',
+): any[] {
   // the YAML library can parse both YAML and JSON content, as well as content with singe/multiple YAMLs
-  // by using this library we don't have to disambiguate between these different contents ourselves
+  // but the YAML library uses a lot of memory which could cause the Node heap to run out of memory: https://snyk.zendesk.com/agent/tickets/35401
+  if (fileType === 'json') {
+    return [JSON.parse(fileContent)];
+  }
+
   return YAML.parseAllDocuments(fileContent).map((doc) => {
     if (shouldThrowErrorFor(doc)) {
       throw doc.errors[0];

@@ -38,9 +38,12 @@ describe('parseFileContent', () => {
   it('Succeeds if YAML and it contains \\/', () => {
     /* eslint-disable no-useless-escape */
     expect(
-      parseFileContent(`{
+      parseFileContent(
+        `{
 "foo": "\\/"
-}`),
+}`,
+        'json',
+      ),
     ).toEqual([
       {
         foo: '/', // "\\/" is the equivalent of '/'
@@ -50,11 +53,12 @@ describe('parseFileContent', () => {
 
   it('Throws an error if keys are not simple strings', () => {
     expect(() => {
-      parseFileContent(`---
-{ foo: "bar"}: bar`);
-    }).toThrowError(
-      'Keys with collection values will be stringified as YAML due to JS Object restrictions. Use mapAsMap: true to avoid this.',
-    );
+      parseFileContent(
+        `---
+{ foo: "bar"}: bar`,
+        'json',
+      );
+    }).toThrowError('Unexpected number in JSON at position 1');
   });
 
   it('Succeeds even if there is insufficient indentation', () => {
