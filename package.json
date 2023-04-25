@@ -34,7 +34,7 @@
     "esprima": "^4.0.1",
     "peggy": "^1.2.0",
     "tslib": "^1.10.0",
-    "yaml": "^1.10.2",
+    "yaml": "^2.2.2",
     "yaml-js": "^0.3.0"
   },
   "devDependencies": {
