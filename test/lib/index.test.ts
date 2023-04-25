@@ -131,6 +131,6 @@ foo: "baz"`),
   it('Fails for invalid JSON', () => {
     expect(() => {
       parseFileContent('{"foo": "bar"');
-    }).toThrowError('Expected flow map to end with }');
+    }).toThrowError(/^Flow map must end with a \} at line 1, column 14\:.*/);
   });
 });
