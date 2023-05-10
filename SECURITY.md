@@ -18,4 +18,4 @@ We ask that:
 - You do not exploit a security issue you discover for any reason. (This includes demonstrating additional risk, such as attempted compromise of sensitive company data or probing for additional issues).
 - You do not violate any other applicable laws or regulations.
 
-Find out more about our [security policy](https://snyk.io/docs/security) and [Bug Bounty program](https://snyk.io/docs/security#snyk-s-vulnerability-disclosure-program)
+Find out more about [disclosing vulnerabilities](https://docs.snyk.io/more-info/disclosing-vulnerabilities)
