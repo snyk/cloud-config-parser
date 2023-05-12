@@ -153,12 +153,12 @@ workflows:
       - security-oss:
           name: Snyk test
           context:
-            - snyk-iac-seceng
+            - snyk-cloud-dev-ex
           <<: *only_branches
       - security-code:
           name: Snyk code
           context:
-            - snyk-iac-seceng
+            - snyk-cloud-dev-ex
           <<: *only_branches
       - release:
           name: Release to GitHub
