@@ -23,7 +23,7 @@
   "author": "snyk.io",
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=6"
+    "node": ">=18"
   },
   "files": [
     "bin",
