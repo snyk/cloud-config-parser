@@ -12,7 +12,11 @@ export function parseFileContent(
     return [JSON.parse(fileContent)];
   }
 
-  return YAML.parseAllDocuments(fileContent).map((doc) => {
+  const documents = YAML.parseAllDocuments(fileContent) as YAML.Document.Parsed<
+    YAML.ParsedNode
+  >[];
+
+  return documents.map((doc) => {
     if (shouldThrowErrorFor(doc)) {
       throw doc.errors[0];
     }
