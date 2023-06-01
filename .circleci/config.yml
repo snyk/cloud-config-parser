@@ -9,7 +9,7 @@ only_branches: &only_branches
 defaults: &defaults
   resource_class: small
   docker:
-    - image: node:14-buster
+    - image: cimg/node:18.0.0
   working_directory: ~/snyk-config-parser
 commands:
   install_deps:
@@ -65,8 +65,6 @@ jobs:
           command: npm run lint
   test:
     <<: *defaults
-    docker:
-      - image: cimg/node:14.18.2
     steps:
       - checkout
       - setup_remote_docker
@@ -102,26 +100,24 @@ jobs:
           name: Release on GitHub
           command: npx semantic-release
   security-oss:
-    docker:
-      - image: cimg/node:17.0.1
+    <<: *defaults
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: npm install
       - snyk/scan:
-          severity-threshold: medium 
+          severity-threshold: medium
           monitor-on-build: false
           project: ${CIRCLE_PROJECT_REPONAME}
           organization: cloud-cloud
   security-code:
-    docker:
-      - image: cimg/node:17.0.1
+    <<: *defaults
     steps:
       - checkout
       - snyk/scan:
           command: code test
-          severity-threshold: medium 
+          severity-threshold: medium
           monitor-on-build: false
           project: ${CIRCLE_PROJECT_REPONAME}
           organization: cloud-cloud
