@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   snyk: snyk/snyk@1.1.1
+  prodsec: snyk/prodsec-orb@1.0.2
 only_branches: &only_branches
   filters:
     branches:
@@ -125,6 +126,11 @@ workflows:
   version: 2
   test_and_release:
     jobs:
+      - prodsec/secrets-scan:
+          name: Scan Repository for Secrets
+          context:
+            - snyk-bot-slack
+          channel: group-infrastructure-as-code-alerts
       - install:
           name: Install
           context: nodejs-install
@@ -159,6 +165,8 @@ workflows:
       - release:
           name: Release to GitHub
           context: nodejs-lib-release
+          requires:
+          - Scan Repository for Secrets
           filters:
             branches:
               only:
