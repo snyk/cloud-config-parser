@@ -7,13 +7,14 @@ metadata:
   annotations:
     github.com/project-slug: snyk/cloud-config-parser
     circleci.com/project-slug: github/snyk/cloud-config-parser
-  description: >
+    github.com/team-slug: snyk/cloud-dev-ex
+  description: |
     A TypeScript library that exposes functions for parsing Infrastructure as Code configuration files for computing the line number.
   labels:
     snyk.io/businessCriticality: low
     snyk.io/visibility: public
     snyk.io/metadata-version: "2022-23-01"
 spec:
-  type: library
-  lifecycle: production
-  owner: "cloud-dev-ex"
+  type: external-library
+  lifecycle: "-"
+  owner: cloud-dev-ex
