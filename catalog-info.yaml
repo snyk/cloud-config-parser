@@ -7,7 +7,7 @@ metadata:
   annotations:
     github.com/project-slug: snyk/cloud-config-parser
     circleci.com/project-slug: github/snyk/cloud-config-parser
-    github.com/team-slug: snyk/cloud-dev-ex
+    github.com/team-slug: snyk/iac
   description: |
     A TypeScript library that exposes functions for parsing Infrastructure as Code configuration files for computing the line number.
   labels:
@@ -17,4 +17,4 @@ metadata:
 spec:
   type: external-library
   lifecycle: "-"
-  owner: cloud-dev-ex
+  owner: iac
