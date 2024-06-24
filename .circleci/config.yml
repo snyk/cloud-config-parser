@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   snyk: snyk/snyk@1.1.1
-  prodsec: snyk/prodsec-orb@1.0.2
+  prodsec: snyk/prodsec-orb@1
 only_branches: &only_branches
   filters:
     branches:
@@ -100,28 +100,13 @@ jobs:
       - run:
           name: Release on GitHub
           command: npx semantic-release
-  security-oss:
+  security-scans:
     <<: *defaults
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: npm install
-      - snyk/scan:
-          severity-threshold: medium
-          monitor-on-build: false
-          project: ${CIRCLE_PROJECT_REPONAME}
-          organization: cloud-cloud
-  security-code:
-    <<: *defaults
-    steps:
-      - checkout
-      - snyk/scan:
-          command: code test
-          severity-threshold: medium
-          monitor-on-build: false
-          project: ${CIRCLE_PROJECT_REPONAME}
-          organization: cloud-cloud
+      - prodsec/security_scans:
+          mode: auto 
+
 workflows:
   version: 2
   test_and_release:
@@ -131,6 +116,10 @@ workflows:
           context:
             - snyk-bot-slack
           channel: group-infrastructure-as-code-alerts
+      - security-scans:
+          name: Security Scans
+          context:
+            - analysis-iac
       - install:
           name: Install
           context: nodejs-install
@@ -151,16 +140,6 @@ workflows:
           context: nodejs-install
           requires:
             - Install
-          <<: *only_branches
-      - security-oss:
-          name: Snyk test
-          context:
-            - snyk-cloud-dev-ex
-          <<: *only_branches
-      - security-code:
-          name: Snyk code
-          context:
-            - snyk-cloud-dev-ex
           <<: *only_branches
       - release:
           name: Release to GitHub
