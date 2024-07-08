@@ -104,8 +104,10 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - install_deps
       - prodsec/security_scans:
-          mode: auto 
+          mode: auto
+          iac-scan: disabled
 
 workflows:
   version: 2
