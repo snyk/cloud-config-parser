@@ -108,6 +108,7 @@ jobs:
       - prodsec/security_scans:
           mode: auto
           iac-scan: disabled
+          release-branch: master
 
 workflows:
   version: 2
