@@ -6,11 +6,11 @@ only_branches: &only_branches
   filters:
     branches:
       ignore:
-        - master
+        - main
 defaults: &defaults
   resource_class: small
   docker:
-    - image: cimg/node:18.0.0
+    - image: cimg/node:20.18.0
   working_directory: ~/snyk-config-parser
 commands:
   install_deps:
@@ -39,8 +39,8 @@ commands:
     steps:
       - checkout
       - run:
-          name: Checkout master
-          command: git checkout origin/master
+          name: Checkout main
+          command: git checkout origin/main
       - run:
           name: Merge test branch
           command: |
@@ -110,7 +110,7 @@ jobs:
       - prodsec/security_scans:
           mode: auto
           iac-scan: disabled
-          release-branch: master
+          release-branch: main
 
 workflows:
   version: 2
@@ -156,4 +156,4 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main

@@ -58,7 +58,7 @@ describe('parseFileContent', () => {
 { foo: "bar"}: bar`,
         'json',
       );
-    }).toThrowError('Unexpected number in JSON at position 1');
+    }).toThrowError(/JSON at position 1/);
   });
 
   it('Succeeds even if there is insufficient indentation', () => {
