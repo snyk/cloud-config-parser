@@ -99,7 +99,9 @@ jobs:
           command: npm run build
       - run:
           name: Release on GitHub
-          command: npx semantic-release
+          command: |
+            export NPM_ID_TOKEN=$(circleci run oidc get --claims '{"aud": "npm:registry.npmjs.org"}')
+            npx semantic-release
   security-scans:
     <<: *defaults
     steps:
@@ -146,7 +148,9 @@ workflows:
           <<: *only_branches
       - release:
           name: Release to GitHub
-          context: nodejs-lib-release
+          context:
+            - nodejs-install
+            - github-release
           requires:
           - Scan Repository for Secrets
           filters:
