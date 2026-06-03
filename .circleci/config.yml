@@ -10,7 +10,7 @@ only_branches: &only_branches
 defaults: &defaults
   resource_class: small
   docker:
-    - image: cimg/node:20.18.0
+    - image: cimg/node:24.16
   working_directory: ~/snyk-config-parser
 commands:
   install_deps:
